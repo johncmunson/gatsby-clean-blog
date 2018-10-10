@@ -1,42 +1,78 @@
 import React from 'react'
 import { graphql } from 'gatsby'
+import Layout from '../components/layout'
 import Link from '../components/link'
 import Helmet from 'react-helmet'
+import Bio from '../components/bio'
+import Footer from '../components/footer'
+import { rhythm } from '../utils/typography'
 
 const Template = ({ data, location, pageContext }) => {
-  const { markdownRemark: post } = data
+  const { markdownRemark: post, site } = data
   const { frontmatter, html } = post
-  const { title, date } = frontmatter
+  const { title, date, excerpt } = frontmatter
   const { next, prev } = pageContext
-
   return (
-    <div>
-      <Helmet title={`${frontmatter.title} - My Blog`} />
+    <Layout location={location}>
+      <Helmet
+        title={`${title} | ${site.siteMetadata.title}`}
+        meta={[{ name: 'description', content: excerpt }]}
+        htmlAttributes={{ lang: 'en' }}
+      />
       <div>
-        <h1>{title}</h1>
-        <h3>{date}</h3>
-        <div dangerouslySetInnerHTML={{ __html: html }} />
-        <p>
-          {prev && (
-            <Link to={prev.frontmatter.path}>
-              Previous: {prev.frontmatter.title}
-            </Link>
-          )}
-        </p>
-        <p>
-          {next && (
-            <Link to={next.frontmatter.path}>
-              Next: {next.frontmatter.title}
-            </Link>
-          )}
-        </p>
+        <h3>{title}</h3>
+        <h5>{date}</h5>
+        <div
+          style={{ marginBottom: rhythm(2) }}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+        <Bio />
+        <hr />
+        <ul
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            listStyle: 'none',
+            padding: 0,
+            margin: 0
+          }}
+        >
+          <li>
+            {prev && (
+              <Link to={prev.frontmatter.path} rel="prev">
+                <small style={{ letterSpacing: 1.2 }}>
+                  <i>
+                    <b>← Previous</b>
+                  </i>
+                </small>
+              </Link>
+            )}
+          </li>
+          <li>
+            {next && (
+              <Link to={next.frontmatter.path} rel="next">
+                <small style={{ letterSpacing: 1.2 }}>
+                  <i>
+                    <b>Next →</b>
+                  </i>
+                </small>
+              </Link>
+            )}
+          </li>
+        </ul>
       </div>
-    </div>
+    </Layout>
   )
 }
 
 export const pageQuery = graphql`
   query BlogPostByPath($path: String!) {
+    site {
+      siteMetadata {
+        title
+      }
+    }
     markdownRemark(frontmatter: { path: { eq: $path } }) {
       html
       frontmatter {

@@ -1,12 +1,13 @@
 import React from 'react'
 import { graphql } from 'gatsby'
-// import Bio from '../components/bio'
+import Bio from '../components/bio'
 import Link from '../components/link'
 import { rhythm } from '../utils/typography'
-// import Layout from '../components/layout'
+import Layout from '../components/layout'
 
 const IndexPage = ({ data, location }) => (
-  <div>
+  <Layout location={location}>
+    <Bio />
     {data.allMarkdownRemark.edges.map(({ node }) => (
       <div key={node.id}>
         <h4
@@ -24,7 +25,7 @@ const IndexPage = ({ data, location }) => (
         />
       </div>
     ))}
-  </div>
+  </Layout>
 )
 
 export default IndexPage

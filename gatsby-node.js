@@ -56,7 +56,7 @@ exports.createPages = ({ actions, graphql }) => {
 
   return graphql(`
     {
-      allMarkdownRemark {
+      allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
         edges {
           node {
             html
@@ -86,8 +86,8 @@ exports.createPages = ({ actions, graphql }) => {
         path: node.frontmatter.path,
         component: blogPostTemplate,
         context: {
-          prev: index === 0 ? null : posts[index - 1].node,
-          next: index === posts.length - 1 ? null : posts[index + 1].node
+          next: index === 0 ? null : posts[index - 1].node,
+          prev: index === posts.length - 1 ? null : posts[index + 1].node
         }
       })
     })
