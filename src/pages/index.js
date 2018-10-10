@@ -1,15 +1,52 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import { graphql } from 'gatsby'
+// import Bio from '../components/bio'
+import Link from '../components/link'
+import { rhythm } from '../utils/typography'
+// import Layout from '../components/layout'
 
-import Layout from '../components/layout'
-
-const IndexPage = () => (
-  <Layout>
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
+const IndexPage = ({ data, location }) => (
+  <div>
+    {data.allMarkdownRemark.edges.map(({ node }) => (
+      <div key={node.id}>
+        {console.log('TO: ', node.frontmatter)}
+        <h4
+          style={{
+            marginBottom: rhythm(1 / 4)
+          }}
+        >
+          <Link to={node.frontmatter.path}>{node.frontmatter.title}</Link>
+        </h4>
+        <small>{node.frontmatter.date}</small>
+        <p
+          dangerouslySetInnerHTML={{
+            __html: node.frontmatter.excerpt || node.excerpt
+          }}
+        />
+      </div>
+    ))}
+  </div>
 )
 
 export default IndexPage
+
+export const pageQuery = graphql`
+  query {
+    allMarkdownRemark {
+      totalCount
+      edges {
+        node {
+          id
+          frontmatter {
+            title
+            date(formatString: "DD MMMM, YYYY")
+            path
+            excerpt
+            tags
+          }
+          excerpt
+        }
+      }
+    }
+  }
+`
