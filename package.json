@@ -1,6 +1,6 @@
 {
-  "name": "gatsby-starter-default",
-  "description": "Gatsby Good Blog",
+  "name": "gatsby-clean-blog",
+  "description": "This gatsby starter aims to be a feature rich blog template with minimal design and sharp attention to typography and typesetting.",
   "version": "1.0.0",
   "author": "John C. Munson <johncmunson91@gmail.com>",
   "dependencies": {
@@ -20,6 +20,7 @@
     "prop-types": "^15.6.2",
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
+    "react-github-corner": "^2.3.0",
     "react-headroom": "2.2.2",
     "react-helmet": "^5.2.0",
     "react-typography": "^0.16.13",
@@ -27,7 +28,10 @@
     "typography": "^0.16.17"
   },
   "keywords": [
-    "gatsby"
+    "gatsby",
+    "blog",
+    "minimal",
+    "typography"
   ],
   "license": "MIT",
   "scripts": {
@@ -60,6 +64,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/johncmunson/gatsby-clean-blog"
   }
 }

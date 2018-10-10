@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { StaticQuery, graphql } from 'gatsby'
 import Header from './header'
+import GithubCorner from 'react-github-corner'
 import { rhythm } from '../utils/typography'
 
 const Layout = ({ children, location }) => (
@@ -27,6 +28,7 @@ const Layout = ({ children, location }) => (
         >
           <html lang="en" />
         </Helmet>
+        <GithubCorner href="https://github.com/" />
         <Header siteTitle={data.site.siteMetadata.title} location={location} />
         <div
           style={{

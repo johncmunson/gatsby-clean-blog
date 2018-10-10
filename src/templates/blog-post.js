@@ -4,7 +4,6 @@ import Layout from '../components/layout'
 import Link from '../components/link'
 import Helmet from 'react-helmet'
 import Bio from '../components/bio'
-import Footer from '../components/footer'
 import { rhythm } from '../utils/typography'
 
 const Template = ({ data, location, pageContext }) => {
