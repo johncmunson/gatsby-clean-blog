@@ -18,11 +18,11 @@ const typography = new Typography({
   overrideStyles: ({ adjustFontSizeTo, rhythm }, options, styles) => ({
     html: {
       fontSize: '2.4vw',
-      textRendering: 'optimizeLegibility'
+      textRendering: 'optimizeLegibility',
     },
     '@media all and (min-width: 1000px) {html{font-size: 24px}}': {},
-    '@media all and (max-width: 520px) {html{font-size: 18px}}': {}
-  })
+    '@media all and (max-width: 520px) {html{font-size: 18px}}': {},
+  }),
 })
 
 // Hot reload typography in development.
