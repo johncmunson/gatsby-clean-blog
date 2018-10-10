@@ -28,7 +28,7 @@ const Layout = ({ children, location }) => (
         >
           <html lang="en" />
         </Helmet>
-        <GithubCorner href="https://github.com/" />
+        <GithubCorner href="https://github.com/johncmunson/gatsby-clean-blog" />
         <Header siteTitle={data.site.siteMetadata.title} location={location} />
         <div
           style={{
