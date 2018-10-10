@@ -2,8 +2,6 @@
 
 This Gatsby starter intends to be a full featured boilerplate for getting started with an MDX powered blog.
 
-![gatsby-mdx](./gatsby-mdx-rectangle.jpg)
-
 ### Getting Started
 
 1. If you haven't already, install `gatsby-cli`... `npm install --global gatsby-cli`
