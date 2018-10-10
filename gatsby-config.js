@@ -5,6 +5,22 @@ module.exports = {
   plugins: [
     `gatsby-plugin-styled-components`,
     'gatsby-plugin-react-helmet',
+    `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'pages',
+        path: `${__dirname}/src/pages/`
+      }
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `images`,
+        path: `${__dirname}/src/images/`
+      },
+    },
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -17,6 +33,6 @@ module.exports = {
         icon: 'src/images/gatsby-icon.png', // This path is relative to the root of the site.
       },
     },
-    'gatsby-plugin-offline',
+    'gatsby-plugin-offline'
   ],
 }
