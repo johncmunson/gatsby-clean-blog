@@ -9,7 +9,6 @@ const IndexPage = ({ data, location }) => (
   <div>
     {data.allMarkdownRemark.edges.map(({ node }) => (
       <div key={node.id}>
-        {console.log('TO: ', node.frontmatter)}
         <h4
           style={{
             marginBottom: rhythm(1 / 4)
@@ -32,7 +31,7 @@ export default IndexPage
 
 export const pageQuery = graphql`
   query {
-    allMarkdownRemark {
+    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
       totalCount
       edges {
         node {
