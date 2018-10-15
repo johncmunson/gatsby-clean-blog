@@ -28,7 +28,16 @@ module.exports = {
         path: `${__dirname}/src/images/`
       }
     },
-    `gatsby-transformer-remark`,
+    {
+      resolve: 'gatsby-transformer-remark',
+      options: {
+        plugins: [
+          'gatsby-remark-copy-linked-files',
+          'gatsby-remark-smartypants',
+          'gatsby-remark-autolink-headers'
+        ]
+      }
+    },
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -41,6 +50,7 @@ module.exports = {
         icon: 'src/images/gatsby-icon.png' // This path is relative to the root of the site.
       }
     },
+    'gatsby-plugin-catch-links',
     'gatsby-plugin-offline'
   ]
 }

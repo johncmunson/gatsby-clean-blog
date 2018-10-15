@@ -8,7 +8,7 @@ import { rhythm } from '../utils/typography'
 
 const Template = ({ data, location, pageContext }) => {
   const { markdownRemark: post, site } = data
-  const { frontmatter, html } = post
+  const { frontmatter, html, tableOfContents } = post
   const { title, date, excerpt } = frontmatter
   const { next, prev } = pageContext
   return (
@@ -21,6 +21,10 @@ const Template = ({ data, location, pageContext }) => {
       <div>
         <h3>{title}</h3>
         <h5>{date}</h5>
+        <div
+          style={{ marginBottom: rhythm(2) }}
+          dangerouslySetInnerHTML={{ __html: tableOfContents }}
+        />
         <div
           style={{ marginBottom: rhythm(2) }}
           dangerouslySetInnerHTML={{ __html: html }}
@@ -74,6 +78,7 @@ export const pageQuery = graphql`
     }
     markdownRemark(frontmatter: { path: { eq: $path } }) {
       html
+      tableOfContents
       frontmatter {
         title
         date(formatString: "MMMM DD, YYYY")

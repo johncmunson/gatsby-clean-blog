@@ -61,6 +61,7 @@ exports.createPages = ({ actions, graphql }) => {
           node {
             html
             id
+            tableOfContents(pathToSlugField: "frontmatter.path")
             frontmatter {
               date
               path
