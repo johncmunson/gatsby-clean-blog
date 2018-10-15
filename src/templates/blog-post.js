@@ -4,12 +4,31 @@ import Layout from '../components/layout'
 import Link from '../components/link'
 import Helmet from 'react-helmet'
 import Bio from '../components/bio'
+import styled from 'styled-components'
 import { rhythm } from '../utils/typography'
+import slugify from '@sindresorhus/slugify'
+
+const TocNav = styled.div`
+  position: fixed;
+  right: 0;
+  top: 35%;
+  width: 8em;
+  margin-top: ${rhythm(-2.5)};
+  margin-bottom: ${rhythm(2)};
+  text-decoration: none;
+  color: inherit;
+`
+
+const NavLink = styled.a`
+  box-shadow: none;
+  text-decoration: none;
+  color: inherit;
+`
 
 const Template = ({ data, location, pageContext }) => {
   const { markdownRemark: post, site } = data
-  const { frontmatter, html, tableOfContents } = post
-  const { title, date, excerpt } = frontmatter
+  const { frontmatter, html, headings } = post
+  const { title, date, excerpt, path } = frontmatter
   const { next, prev } = pageContext
   return (
     <Layout location={location}>
@@ -21,10 +40,17 @@ const Template = ({ data, location, pageContext }) => {
       <div>
         <h3>{title}</h3>
         <h5>{date}</h5>
-        <div
-          style={{ marginBottom: rhythm(2) }}
-          dangerouslySetInnerHTML={{ __html: tableOfContents }}
-        />
+        {headings && (
+          <TocNav>
+            {headings.map((heading, i) => (
+              <div key={i}>
+                <NavLink href={`${path}#${slugify(heading.value)}`}>
+                  <small>{heading.value}</small>
+                </NavLink>
+              </div>
+            ))}
+          </TocNav>
+        )}
         <div
           style={{ marginBottom: rhythm(2) }}
           dangerouslySetInnerHTML={{ __html: html }}
@@ -78,6 +104,10 @@ export const pageQuery = graphql`
     }
     markdownRemark(frontmatter: { path: { eq: $path } }) {
       html
+      headings {
+        value
+        depth
+      }
       tableOfContents
       frontmatter {
         title

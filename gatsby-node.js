@@ -61,6 +61,10 @@ exports.createPages = ({ actions, graphql }) => {
           node {
             html
             id
+            headings {
+              value
+              depth
+            }
             tableOfContents(pathToSlugField: "frontmatter.path")
             frontmatter {
               date

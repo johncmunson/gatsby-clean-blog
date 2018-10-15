@@ -4,11 +4,13 @@
   "version": "1.0.0",
   "author": "John C. Munson <johncmunson91@gmail.com>",
   "dependencies": {
+    "@sindresorhus/slugify": "^0.4.0",
     "babel-plugin-styled-components": "^1.8.0",
     "gatsby": "^2.0.0",
     "gatsby-image": "^2.0.13",
     "gatsby-plugin-catch-links": "^2.0.4",
     "gatsby-plugin-manifest": "^2.0.2",
+    "gatsby-plugin-nprogress": "^2.0.5",
     "gatsby-plugin-offline": "^2.0.5",
     "gatsby-plugin-react-helmet": "^3.0.0",
     "gatsby-plugin-sharp": "^2.0.6",
