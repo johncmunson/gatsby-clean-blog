@@ -91,8 +91,8 @@ exports.createPages = ({ actions, graphql }) => {
         path: node.frontmatter.path,
         component: blogPostTemplate,
         context: {
-          next: index === 0 ? null : posts[index - 1].node,
-          prev: index === posts.length - 1 ? null : posts[index + 1].node
+          prev: index === 0 ? null : posts[index - 1].node,
+          next: index === posts.length - 1 ? null : posts[index + 1].node
         }
       })
     })

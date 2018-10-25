@@ -1,48 +1,115 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { StaticQuery, graphql } from 'gatsby'
 import Header from './header'
 import GithubCorner from 'react-github-corner'
+import styled, { keyframes } from 'styled-components'
 import { rhythm } from '../utils/typography'
+import { disableScrollAtTopAndBottom } from '../utils'
+import BurgerIcon from '../images/baseline-menu-24px.svg'
+import CloseIcon from '../images/baseline-close-24px.svg'
 
-const Layout = ({ children, location }) => (
-  <StaticQuery
-    query={graphql`
-      query SiteTitleQuery {
-        site {
-          siteMetadata {
-            title
+const Overlay = styled.div`
+  height: 100vh;
+  width: 100vw;
+  z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: ${props => props.opacity};
+  visibility: ${props => props.visibility};
+  background-color: white;
+  transition: 0.25s;
+  overflow-y: auto;
+`
+
+const Hide = styled.div`
+  @media (max-width: 101em) {
+    display: none;
+  }
+`
+
+class Layout extends Component {
+  state = {
+    overlayActive: false
+  }
+  toggleOverlay = () =>
+    this.setState({ overlayActive: !this.state.overlayActive })
+  setOverlayRef = element => (this.target = element)
+  onWheel = e => disableScrollAtTopAndBottom(e, this.target)
+  render() {
+    const { children, location, renderNav, renderRelated } = this.props
+    const { overlayActive } = this.state
+    const { toggleOverlay, setOverlayRef, onWheel } = this
+    return (
+      <StaticQuery
+        query={graphql`
+          query SiteTitleQuery {
+            site {
+              siteMetadata {
+                title
+              }
+            }
           }
-        }
-      }
-    `}
-    render={data => (
-      <>
-        <Helmet
-          title={data.site.siteMetadata.title}
-          meta={[
-            { name: 'description', content: 'Sample' },
-            { name: 'keywords', content: 'sample, something' }
-          ]}
-        >
-          <html lang="en" />
-        </Helmet>
-        <GithubCorner href="https://github.com/johncmunson/gatsby-clean-blog" />
-        <Header siteTitle={data.site.siteMetadata.title} location={location} />
-        <div
-          style={{
-            margin: '0 auto',
-            maxWidth: rhythm(22),
-            padding: `${rhythm(1.5)} ${rhythm(3 / 4)}`
-          }}
-        >
-          {children}
-        </div>
-      </>
-    )}
-  />
-)
+        `}
+        render={data => (
+          <>
+            <Helmet
+              title={data.site.siteMetadata.title}
+              meta={[
+                { name: 'description', content: 'Sample' },
+                { name: 'keywords', content: 'sample, something' }
+              ]}
+            >
+              <html lang="en" />
+            </Helmet>
+            <GithubCorner href="https://github.com/johncmunson/gatsby-clean-blog" />
+            <Overlay
+              ref={setOverlayRef}
+              opacity={overlayActive ? '0.95' : '0'}
+              visibility={overlayActive ? 'visible' : 'hidden'}
+              onWheel={onWheel}
+            />
+            <Header
+              siteTitle={data.site.siteMetadata.title}
+              location={location}
+              preventScroll={overlayActive}
+              renderIcon={() =>
+                overlayActive ? (
+                  <CloseIcon onClick={toggleOverlay} />
+                ) : (
+                  <BurgerIcon onClick={toggleOverlay} />
+                )
+              }
+            />
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center'
+              }}
+            >
+              <Hide style={{ width: rhythm(10), marginRight: '1.5em' }}>
+                {renderRelated && renderRelated()}
+              </Hide>
+              <div
+                style={{
+                  maxWidth: rhythm(22),
+                  padding: `${rhythm(1.5)} ${rhythm(3 / 4)}`
+                }}
+              >
+                {children}
+              </div>
+              <Hide style={{ width: rhythm(10), marginLeft: '1.5em' }}>
+                {renderNav && renderNav()}
+              </Hide>
+            </div>
+          </>
+        )}
+      />
+    )
+  }
+}
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired

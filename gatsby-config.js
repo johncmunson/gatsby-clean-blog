@@ -5,6 +5,7 @@ module.exports = {
   plugins: [
     `gatsby-plugin-styled-components`,
     'gatsby-plugin-react-helmet',
+    'gatsby-plugin-react-svg',
     {
       resolve: 'gatsby-plugin-typography',
       options: {
@@ -43,7 +44,16 @@ module.exports = {
         plugins: [
           'gatsby-remark-copy-linked-files',
           'gatsby-remark-smartypants',
-          'gatsby-remark-autolink-headers'
+          'gatsby-remark-autolink-headers',
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              // It's important to specify the maxWidth (in pixels) of
+              // the content container as this plugin uses this as the
+              // base for generating different widths of each image.
+              maxWidth: 700
+            }
+          }
         ]
       }
     },
