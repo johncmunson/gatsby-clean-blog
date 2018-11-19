@@ -5,9 +5,13 @@ to navigate up the page. See this stackoverflow answer
 for more context...
 https://stackoverflow.com/questions/4086107/fixed-page-header-overlaps-in-page-anchors
 */
-:target::before {
+/* :target::before {
   content: '';
   display: block;
-  height: 80px; /* fixed header height */
-  margin: -80px 0 0; /* negative fixed header height */
+  height: 80px;
+  margin: -80px 0 0;
+} */
+
+.active-nav-link {
+  opacity: 1;
 }

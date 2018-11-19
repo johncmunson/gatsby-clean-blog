@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../components/layout'
 import Link from '../components/link'
@@ -10,8 +10,9 @@ import { rhythm, scale } from '../utils/typography'
 import slugify from '@sindresorhus/slugify'
 import StickyBox from 'react-sticky-box'
 import './blog-post.css'
+import { Link as ScrollLink } from 'react-scroll'
 
-const NavLink = styled.a`
+const NavLink = styled(ScrollLink)`
   box-shadow: none;
   text-decoration: none;
   color: inherit;
@@ -41,6 +42,43 @@ const generateHeadingNumbers = headings => {
   })
 }
 
+class NavHeadings extends Component {
+  state = {
+    activeNavHeading: null
+  }
+  handleSetActive = e => {
+    console.log(e)
+    this.setState({ activeNavHeading: e })
+    history.replaceState(undefined, undefined, `#${e}`)
+  }
+  handleNavHeadingClick = heading => {
+    this.handleSetActive(heading)
+  }
+  render() {
+    return this.props.headings.map((heading, i) => (
+      <NavLink
+        className={
+          this.state.activeNavHeading === slugify(heading.value) &&
+          'active-nav-link'
+        }
+        key={i}
+        depth={heading.depth}
+        to={`${slugify(heading.value)}`}
+        spy={true}
+        smooth={true}
+        offset={-80}
+        onSetActive={this.handleSetActive}
+        onClick={() => this.handleNavHeadingClick(slugify(heading.value))}
+      >
+        <Text size="0.7em" style={{ lineHeight: 1.2, marginBottom: '0.5em' }}>
+          <span style={{ marginRight: '0.25em' }}>{heading.tocNumber}.</span>
+          <span>{heading.value}</span>
+        </Text>
+      </NavLink>
+    ))
+  }
+}
+
 const Template = ({ data, location, pageContext }) => {
   const { markdownRemark: post, site } = data
   const { frontmatter, html, headings } = post
@@ -68,26 +106,7 @@ const Template = ({ data, location, pageContext }) => {
               >
                 Outline:
               </Text>
-              {headings.map(
-                (heading, i) =>
-                  heading.depth < 4 && (
-                    <NavLink
-                      key={i}
-                      depth={heading.depth}
-                      href={`#${slugify(heading.value)}`}
-                    >
-                      <Text
-                        size="0.7em"
-                        style={{ lineHeight: 1.2, marginBottom: '0.5em' }}
-                      >
-                        <span style={{ marginRight: '0.25em' }}>
-                          {heading.tocNumber}.
-                        </span>
-                        <span>{heading.value}</span>
-                      </Text>
-                    </NavLink>
-                  )
-              )}
+              <NavHeadings headings={headings} />
             </StickyBox>
           )
         }
