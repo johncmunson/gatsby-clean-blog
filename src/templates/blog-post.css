@@ -1,0 +1,13 @@
+/*
+This psuedo element prevents markdown headings from being
+obscured by the sticky header when an anchor tag is used
+to navigate up the page. See this stackoverflow answer
+for more context...
+https://stackoverflow.com/questions/4086107/fixed-page-header-overlaps-in-page-anchors
+*/
+:target::before {
+  content: '';
+  display: block;
+  height: 80px; /* fixed header height */
+  margin: -80px 0 0; /* negative fixed header height */
+}

@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import { rhythm, scale } from '../utils/typography'
 import slugify from '@sindresorhus/slugify'
 import StickyBox from 'react-sticky-box'
+import './blog-post.css'
 
 const NavLink = styled.a`
   box-shadow: none;
@@ -73,7 +74,7 @@ const Template = ({ data, location, pageContext }) => {
                     <NavLink
                       key={i}
                       depth={heading.depth}
-                      href={`${path}#${slugify(heading.value)}`}
+                      href={`#${slugify(heading.value)}`}
                     >
                       <Text
                         size="0.7em"
@@ -82,7 +83,7 @@ const Template = ({ data, location, pageContext }) => {
                         <span style={{ marginRight: '0.25em' }}>
                           {heading.tocNumber}.
                         </span>
-                        {heading.value}
+                        <span>{heading.value}</span>
                       </Text>
                     </NavLink>
                   )
@@ -176,3 +177,44 @@ export const pageQuery = graphql`
 `
 
 export default Template
+
+// Example of how to replace markdown elements with custom react components...
+
+// STEP 1:
+// import rehypeReact from "rehype-react"
+// import ScrollableAnchor from 'react-scrollable-anchor'
+// import { configureAnchors } from 'react-scrollable-anchor'
+
+// STEP 2:
+// const ScrollableH1 = ({ id, children }) => <ScrollableAnchor id={id}><h1>{ children }</h1></ScrollableAnchor>
+// const ScrollableH2 = ({ id, children }) => <ScrollableAnchor id={id}><h2>{ children }</h2></ScrollableAnchor>
+// const ScrollableH3 = ({ id, children }) => <ScrollableAnchor id={id}><h3>{ children }</h3></ScrollableAnchor>
+// const ScrollableH4 = ({ id, children }) => <ScrollableAnchor id={id}><h4>{ children }</h4></ScrollableAnchor>
+// const ScrollableH5 = ({ id, children }) => <ScrollableAnchor id={id}><h5>{ children }</h5></ScrollableAnchor>
+// const ScrollableH6 = ({ id, children }) => <ScrollableAnchor id={id}><h6>{ children }</h6></ScrollableAnchor>
+
+// STEP 3:
+// const renderAst = new rehypeReact({
+//   createElement: React.createElement,
+//   components: {
+//     h1: ScrollableH1,
+//     h2: ScrollableH2,
+//     h3: ScrollableH3,
+//     h4: ScrollableH4,
+//     h5: ScrollableH5,
+//     h6: ScrollableH6
+//   }
+// }).Compiler
+
+// STEP 4:
+
+// replace...
+// <div dangerouslySetInnerHTML={{ __html: html }} />
+
+// with...
+// <div>{ renderAst(htmlAst) }</div>
+
+// STEP 5:
+// markdownRemark(frontmatter: { path: { eq: $path } }) {
+//   html
+//   htmlAst
