@@ -1,3 +1,4 @@
 .active-nav-link {
   opacity: 1;
+  border-left: solid 1px;
 }
