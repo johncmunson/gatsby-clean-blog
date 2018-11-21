@@ -9,10 +9,10 @@ import styled from 'styled-components'
 import { rhythm, scale } from '../utils/typography'
 import slugify from '@sindresorhus/slugify'
 import StickyBox from 'react-sticky-box'
-import './blog-post.css'
 import { Link as ScrollLink, Events } from 'react-scroll'
 import Observer from '@researchgate/react-intersection-observer'
 import rehypeReact from 'rehype-react'
+import './blog-post.css'
 
 const NavLink = styled(ScrollLink)`
   box-shadow: none;
