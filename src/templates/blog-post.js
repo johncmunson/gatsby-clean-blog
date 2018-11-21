@@ -138,6 +138,7 @@ class Template extends Component {
     const { frontmatter, html, htmlAst, headings } = post
     const { title, date, excerpt, path } = frontmatter
     const { next, prev } = this.props.pageContext
+    const location = this.props.location
     if (headings.length) generateHeadingNumbers(headings)
     return (
       <Layout
