@@ -10,7 +10,7 @@ import { rhythm, scale } from '../utils/typography'
 import slugify from '@sindresorhus/slugify'
 import StickyBox from 'react-sticky-box'
 import './blog-post.css'
-import { Link as ScrollLink } from 'react-scroll'
+import { Link as ScrollLink, Events } from 'react-scroll'
 import Observer from '@researchgate/react-intersection-observer'
 import rehypeReact from 'rehype-react'
 
@@ -79,8 +79,24 @@ const getRenderAst = components =>
 
 class Template extends Component {
   state = {
-    activeNavHeading: null,
-    handleObserverChangeAttempts: 0
+    activeNavHeading: this.props.data.markdownRemark.headings.length
+      ? slugify(this.props.data.markdownRemark.headings[0].value)
+      : null,
+    handleObserverChangeAttempts: 0,
+    animatingScroll: false
+  }
+  componentDidMount() {
+    let that = this
+    Events.scrollEvent.register('begin', function() {
+      that.setState({ ...this.state, animatingScroll: true })
+    })
+    Events.scrollEvent.register('end', function() {
+      that.setState({ ...this.state, animatingScroll: false })
+    })
+  }
+  componentWillUnmount() {
+    Events.scrollEvent.remove('begin')
+    Events.scrollEvent.remove('end')
   }
   handleObserverChange = (e, heading) => {
     this.setState({
@@ -89,7 +105,8 @@ class Template extends Component {
     })
     if (
       this.state.handleObserverChangeAttempts >
-      this.props.data.markdownRemark.headings.length
+        this.props.data.markdownRemark.headings.length &&
+      !this.state.animatingScroll
     ) {
       this.handleNavHeadingClick(heading)
     }
