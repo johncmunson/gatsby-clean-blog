@@ -27,7 +27,7 @@ const NavLink = styled(ScrollLink)`
   }
 `
 
-const NavHeadings = ({ headings, activeNavHeading, handleNavHeadingClick }) =>
+const NavHeadings = ({ headings, activeNavHeading }) =>
   headings.map((heading, i) => (
     <NavLink
       key={i}
@@ -38,7 +38,6 @@ const NavHeadings = ({ headings, activeNavHeading, handleNavHeadingClick }) =>
       to={`${slugify(heading.value)}`}
       smooth={true}
       offset={-80}
-      onClick={() => handleNavHeadingClick(slugify(heading.value))}
     >
       <Text size="0.7em" style={{ lineHeight: 1.2, marginBottom: '0.5em' }}>
         <span style={{ marginRight: '0.3em' }} />
@@ -59,6 +58,24 @@ const getRenderAst = components =>
     components: components
   }).Compiler
 
+const generateHeadingNumbers = headings => {
+  let stack = []
+  headings.forEach(heading => {
+    let depth = heading.depth
+    if (depth > stack.length) {
+      while (depth > stack.length) {
+        stack.push(1)
+      }
+    } else {
+      while (depth < stack.length) {
+        stack.pop()
+      }
+      stack[stack.length - 1]++
+    }
+    heading.tocNumber = stack.join('.')
+  })
+}
+
 class Template extends Component {
   state = {
     activeNavHeading: this.props.data.markdownRemark.headings.length
@@ -68,6 +85,12 @@ class Template extends Component {
     animatingScroll: false
   }
   componentDidMount() {
+    if (window.location.hash) {
+      this.setState({
+        ...this.state,
+        activeNavHeading: window.location.hash.substr(1)
+      })
+    }
     let that = this
     Events.scrollEvent.register('begin', function() {
       that.setState({ ...this.state, animatingScroll: true })
@@ -87,15 +110,20 @@ class Template extends Component {
     })
     if (
       this.state.handleObserverChangeAttempts >
-        this.props.data.markdownRemark.headings.length &&
-      !this.state.animatingScroll
+      this.props.data.markdownRemark.headings.length
     ) {
-      this.handleNavHeadingClick(heading)
+      this.setState({ ...this.state, activeNavHeading: heading })
+      history.replaceState(undefined, undefined, `#${heading}`)
     }
   }
-  handleNavHeadingClick = heading => {
-    this.setState({ ...this.state, activeNavHeading: heading })
-    history.replaceState(undefined, undefined, `#${heading}`)
+  handleOnWheel = e => {
+    if (window.scrollY === 0 && window.location.hash) {
+      history.replaceState(
+        '',
+        document.title,
+        window.location.pathname + window.location.search
+      )
+    }
   }
   markdownToComponentMap = {
     h1: getObservedHeading('h1', this.handleObserverChange),
@@ -134,7 +162,6 @@ class Template extends Component {
                 <NavHeadings
                   headings={headings}
                   activeNavHeading={this.state.activeNavHeading}
-                  handleNavHeadingClick={this.handleNavHeadingClick}
                 />
               </StickyBox>
             )
@@ -146,8 +173,25 @@ class Template extends Component {
           meta={[{ name: 'description', content: excerpt }]}
           htmlAttributes={{ lang: 'en' }}
         />
-        <div>
-          <div style={{ marginBottom: '0.2em', ...scale(0.5) }}>
+        <div id="post-container" onWheel={this.handleOnWheel}>
+          <div
+            className="post-title"
+            style={{ marginBottom: '0.2em', ...scale(0.5) }}
+          >
+            <a href="#" aria-hidden="true" className="anchor">
+              <svg
+                aria-hidden="true"
+                height="16"
+                version="1.1"
+                viewBox="0 0 16 16"
+                width="16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+                />
+              </svg>
+            </a>
             <i>
               <b>{title}</b>
             </i>
@@ -226,24 +270,3 @@ export const pageQuery = graphql`
 `
 
 export default Template
-
-// This function is useful for creating numbers for your headings.
-// There is no return value, the function mutates the headers array in place.
-// Example... 1, 1.1, 2.1.2, etc.
-// const generateHeadingNumbers = headings => {
-//   let stack = []
-//   headings.forEach(heading => {
-//     let depth = heading.depth
-//     if (depth > stack.length) {
-//       while (depth > stack.length) {
-//         stack.push(1)
-//       }
-//     } else {
-//       while (depth < stack.length) {
-//         stack.pop()
-//       }
-//       stack[stack.length - 1]++
-//     }
-//     heading.tocNumber = stack.join('.')
-//   })
-// }

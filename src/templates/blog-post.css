@@ -2,3 +2,12 @@
   opacity: 1;
   border-left: solid 1px;
 }
+
+.anchor svg {
+  visibility: hidden;
+}
+
+.post-title:hover .anchor svg,
+.anchor:focus svg {
+  visibility: visible;
+}
