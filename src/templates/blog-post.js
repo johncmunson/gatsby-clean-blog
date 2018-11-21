@@ -45,42 +45,6 @@ const generateHeadingNumbers = headings => {
   })
 }
 
-// class NavHeadings extends Component {
-//   state = {
-//     activeNavHeading: null
-//   }
-//   handleSetActive = e => {
-//     console.log(e)
-//     this.setState({ activeNavHeading: e })
-//     history.replaceState(undefined, undefined, `#${e}`)
-//   }
-//   handleNavHeadingClick = heading => {
-//     this.handleSetActive(heading)
-//   }
-//   render() {
-//     return this.props.headings.map((heading, i) => (
-//       <NavLink
-//         className={
-//           this.state.activeNavHeading === slugify(heading.value) &&
-//           'active-nav-link'
-//         }
-//         key={i}
-//         depth={heading.depth}
-//         to={`${slugify(heading.value)}`}
-//         smooth={true}
-//         offset={-80}
-//         onSetActive={this.handleSetActive}
-//         onClick={() => this.handleNavHeadingClick(slugify(heading.value))}
-//       >
-//         <Text size="0.7em" style={{ lineHeight: 1.2, marginBottom: '0.5em' }}>
-//           <span style={{ marginRight: '0.25em' }}>{heading.tocNumber}.</span>
-//           <span>{heading.value}</span>
-//         </Text>
-//       </NavLink>
-//     ))
-//   }
-// }
-
 const NavHeadings = ({ headings, activeNavHeading, handleNavHeadingClick }) =>
   headings.map((heading, i) => (
     <NavLink
@@ -126,8 +90,9 @@ class Template extends Component {
     if (
       this.state.handleObserverChangeAttempts >
       this.props.data.markdownRemark.headings.length
-    )
+    ) {
       this.handleNavHeadingClick(heading)
+    }
   }
   handleNavHeadingClick = heading => {
     this.setState({ ...this.state, activeNavHeading: heading })
@@ -235,97 +200,6 @@ class Template extends Component {
   }
 }
 
-// const Template = ({ data, location, pageContext }) => {
-//   const { markdownRemark: post, site } = data
-//   const { frontmatter, html, headings } = post
-//   const { title, date, excerpt, path } = frontmatter
-//   const { next, prev } = pageContext
-//   if (headings.length) generateHeadingNumbers(headings)
-//   return (
-//     <Layout
-//       location={location}
-//       renderNav={() => {
-//         if (headings.length) {
-//           return (
-//             <StickyBox
-//               offsetTop={5}
-//               style={{
-//                 marginLeft: '2em',
-//                 marginTop: '11.25em',
-//                 lineHeight: rhythm(1),
-//                 fontStyle: 'italic'
-//               }}
-//             >
-//               <Text
-//                 size="0.85em"
-//                 style={{ opacity: 0.75, marginBottom: '0.5em' }}
-//               >
-//                 Outline:
-//               </Text>
-//               <NavHeadings headings={headings} />
-//             </StickyBox>
-//           )
-//         }
-//       }}
-//     >
-//       <Helmet
-//         title={`${title} | ${site.siteMetadata.title}`}
-//         meta={[{ name: 'description', content: excerpt }]}
-//         htmlAttributes={{ lang: 'en' }}
-//       />
-//       <div>
-//         <div style={{ marginBottom: '0.2em', ...scale(0.5) }}>
-//           <i>
-//             <b>{title}</b>
-//           </i>
-//         </div>
-//         <Text size="0.8em" style={{ marginBottom: '3.5em' }}>
-//           <i>{date}</i>
-//         </Text>
-//         <div
-//           style={{ marginBottom: rhythm(2) }}
-//           dangerouslySetInnerHTML={{ __html: html }}
-//         />
-//         <Bio />
-//         <hr />
-//         <ul
-//           style={{
-//             display: 'flex',
-//             flexWrap: 'wrap',
-//             justifyContent: 'space-between',
-//             listStyle: 'none',
-//             padding: 0,
-//             margin: 0
-//           }}
-//         >
-//           <li>
-//             {prev && (
-//               <Link to={prev.frontmatter.path} rel="prev">
-//                 <small style={{ letterSpacing: 1.2 }}>
-//                   <i>
-//                     <b>← Previous</b>
-//                   </i>
-//                 </small>
-//               </Link>
-//             )}
-//           </li>
-//           <li>
-//             {next && (
-//               <Link to={next.frontmatter.path} rel="next">
-//                 <small style={{ letterSpacing: 1.2 }}>
-//                   <i>
-//                     <b>Next →</b>
-//                   </i>
-//                 </small>
-//               </Link>
-//             )}
-//           </li>
-//         </ul>
-//       </div>
-//     </Layout>
-//   )
-// }
-
 export const pageQuery = graphql`
   query BlogPostByPath($path: String!) {
     site {
@@ -390,7 +264,6 @@ export default Template
 // with...
 // <div>{ renderAst(htmlAst) }</div>
 
-// STEP 5:
+// STEP 5: modify graphQL query to include...
 // markdownRemark(frontmatter: { path: { eq: $path } }) {
-//   html
 //   htmlAst
