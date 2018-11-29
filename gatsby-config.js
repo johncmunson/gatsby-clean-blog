@@ -1,6 +1,8 @@
 module.exports = {
   siteMetadata: {
-    title: 'gatsby clean blog'
+    title: 'gatsby clean blog',
+    homepageCoverImages: true,
+    blogPostCoverImages: true
   },
   plugins: [
     `gatsby-plugin-styled-components`,

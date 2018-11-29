@@ -8,7 +8,7 @@ const Bio = ({ data }) => (
     style={{
       display: 'flex',
       alignItems: 'center',
-      marginBottom: rhythm(2)
+      marginBottom: rhythm(1.5)
     }}
   >
     <div style={{ marginRight: rhythm(0.5) }}>

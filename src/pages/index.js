@@ -4,25 +4,41 @@ import Bio from '../components/bio'
 import Link from '../components/link'
 import { rhythm } from '../utils/typography'
 import Layout from '../components/layout'
-import Img from 'gatsby-image'
+import CoverImage from '../components/cover-image'
 
 const IndexPage = ({ data, location }) => (
   <Layout location={location}>
     <Bio />
     {data.allMarkdownRemark.edges.map(({ node }) => (
       <div key={node.id}>
-        {node.frontmatter.cover && (
-          <Img fluid={node.frontmatter.cover.childImageSharp.fluid} />
+        {data.site.siteMetadata.homepageCoverImages ? (
+          <CoverImage
+            img={node.frontmatter.cover.childImageSharp.fluid}
+            title={node.frontmatter.title}
+            date={node.frontmatter.date}
+            to={node.frontmatter.path}
+          />
+        ) : (
+          <>
+            <h4
+              style={{
+                marginBottom: rhythm(1 / 12)
+              }}
+            >
+              <Link to={node.frontmatter.path}>{node.frontmatter.title}</Link>
+            </h4>
+            <small
+              style={{
+                display: 'block',
+                marginBottom: rhythm(1 / 4)
+              }}
+            >
+              {node.frontmatter.date}
+            </small>
+          </>
         )}
-        <h4
-          style={{
-            marginBottom: rhythm(1 / 4)
-          }}
-        >
-          <Link to={node.frontmatter.path}>{node.frontmatter.title}</Link>
-        </h4>
-        <small>{node.frontmatter.date}</small>
         <p
+          style={{ marginBottom: `${rhythm(1.5)}` }}
           dangerouslySetInnerHTML={{
             __html: node.frontmatter.excerpt || node.excerpt
           }}
@@ -36,6 +52,13 @@ export default IndexPage
 
 export const pageQuery = graphql`
   query {
+    site {
+      siteMetadata {
+        title
+        homepageCoverImages
+        blogPostCoverImages
+      }
+    }
     allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
       totalCount
       edges {
@@ -65,3 +88,13 @@ export const pageQuery = graphql`
     }
   }
 `
+
+// WHAT THE TITLE AND DATE LOOKED LIKE BEFORE THE COVER IMAGE
+// <h4
+//   style={{
+//     marginBottom: rhythm(1 / 4)
+//   }}
+// >
+//   <Link to={node.frontmatter.path}>{node.frontmatter.title}</Link>
+// </h4>
+// <small>{node.frontmatter.date}</small>
