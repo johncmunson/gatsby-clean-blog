@@ -5,6 +5,7 @@ import Link from '../components/link'
 import Helmet from 'react-helmet'
 import Bio from '../components/bio'
 import Text from '../components/text'
+import Img from 'gatsby-image'
 import styled from 'styled-components'
 import { rhythm, scale } from '../utils/typography'
 import slugify from '@sindresorhus/slugify'
@@ -25,6 +26,18 @@ const NavLink = styled(ScrollLink)`
     opacity: 1;
     cursor: pointer;
   }
+`
+
+const CoverWrapper = styled.div`
+  position: relative;
+  color: white;
+  margin-bottom: ${rhythm(1.5)};
+`
+
+const CoverText = styled.div`
+  position: absolute;
+  bottom: 8px;
+  left: 16px;
 `
 
 const NavHeadings = ({ headings, activeNavHeading }) =>
@@ -136,7 +149,7 @@ class Template extends Component {
   render() {
     const { markdownRemark: post, site } = this.props.data
     const { frontmatter, html, htmlAst, headings } = post
-    const { title, date, excerpt, path } = frontmatter
+    const { title, date, path, tags, excerpt, cover } = frontmatter
     const { next, prev } = this.props.pageContext
     const location = this.props.location
     if (headings.length) generateHeadingNumbers(headings)
@@ -174,32 +187,37 @@ class Template extends Component {
           meta={[{ name: 'description', content: excerpt }]}
           htmlAttributes={{ lang: 'en' }}
         />
-        <div id="post-container" onWheel={this.handleOnWheel}>
-          <div
-            className="post-title"
-            style={{ marginBottom: '0.2em', ...scale(0.5) }}
-          >
-            <a href="#" aria-hidden="true" className="anchor">
-              <svg
-                aria-hidden="true"
-                height="16"
-                version="1.1"
-                viewBox="0 0 16 16"
-                width="16"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
-                />
-              </svg>
-            </a>
-            <i>
-              <b>{title}</b>
-            </i>
-          </div>
-          <Text size="0.8em" style={{ marginBottom: '3.5em' }}>
-            <i>{date}</i>
-          </Text>
+        <div onWheel={this.handleOnWheel}>
+          <CoverWrapper>
+            <Img
+              fluid={cover.childImageSharp.fluid}
+              style={{ borderRadius: '0.2em' }}
+            />
+            <CoverText>
+              <Text size="0.8em">
+                <i>{date}</i>
+              </Text>
+              <div className="post-title" style={{ ...scale(0.5) }}>
+                <a href="#" aria-hidden="true" className="anchor">
+                  <svg
+                    aria-hidden="true"
+                    height="16"
+                    version="1.1"
+                    viewBox="0 0 16 16"
+                    width="16"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+                    />
+                  </svg>
+                </a>
+                <i>
+                  <b>{title}</b>
+                </i>
+              </div>
+            </CoverText>
+          </CoverWrapper>
           <div style={{ marginBottom: rhythm(2) }}>
             {getRenderAst(this.markdownToComponentMap)(htmlAst)}
           </div>
@@ -265,9 +283,44 @@ export const pageQuery = graphql`
         path
         tags
         excerpt
+        cover {
+          childImageSharp {
+            fluid(maxWidth: 1000, quality: 90, traceSVG: { color: "#2B2B2F" }) {
+              ...GatsbyImageSharpFluid_withWebp_tracedSVG
+            }
+          }
+        }
       }
     }
   }
 `
 
 export default Template
+
+// REPLACE <CoverWrapper> and it's contents with the markup below to get
+// get version w/o the cover image
+// <div
+//   className="post-title"
+//   style={{ marginBottom: '0.2em', ...scale(0.5) }}
+// >
+//   <a href="#" aria-hidden="true" className="anchor">
+//     <svg
+//       aria-hidden="true"
+//       height="16"
+//       version="1.1"
+//       viewBox="0 0 16 16"
+//       width="16"
+//     >
+//       <path
+//         fillRule="evenodd"
+//         d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+//       />
+//     </svg>
+//   </a>
+//   <i>
+//     <b>{title}</b>
+//   </i>
+// </div>
+// <Text size="0.8em" style={{ paddingBottom: `${rhythm(1.5)}` }}>
+//   <i>{date}</i>
+// </Text>

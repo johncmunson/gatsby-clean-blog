@@ -4,6 +4,7 @@ date: '2016-01-10'
 path: '/first-page/'
 tags: ['first', 'page']
 excerpt: 'The first page comes before the second page.'
+cover: './racecar.jpg'
 ---
 
 # H1

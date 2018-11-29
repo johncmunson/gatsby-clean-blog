@@ -4,6 +4,7 @@ date: '2018-04-20'
 path: '/third-page/'
 tags: ['third', 'page']
 excerpt: 'The third page comes after the second page.'
+cover: './racecar.jpg'
 ---
 
 1. First ordered list item

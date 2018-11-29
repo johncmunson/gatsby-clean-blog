@@ -4,12 +4,16 @@ import Bio from '../components/bio'
 import Link from '../components/link'
 import { rhythm } from '../utils/typography'
 import Layout from '../components/layout'
+import Img from 'gatsby-image'
 
 const IndexPage = ({ data, location }) => (
   <Layout location={location}>
     <Bio />
     {data.allMarkdownRemark.edges.map(({ node }) => (
       <div key={node.id}>
+        {node.frontmatter.cover && (
+          <Img fluid={node.frontmatter.cover.childImageSharp.fluid} />
+        )}
         <h4
           style={{
             marginBottom: rhythm(1 / 4)
@@ -43,6 +47,17 @@ export const pageQuery = graphql`
             path
             excerpt
             tags
+            cover {
+              childImageSharp {
+                fluid(
+                  maxWidth: 1000
+                  quality: 90
+                  traceSVG: { color: "#2B2B2F" }
+                ) {
+                  ...GatsbyImageSharpFluid_withWebp_tracedSVG
+                }
+              }
+            }
           }
           excerpt
         }
