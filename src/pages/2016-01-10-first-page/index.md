@@ -5,6 +5,7 @@ path: '/first-page/'
 tags: ['first', 'page']
 excerpt: 'The first page comes before the second page.'
 cover: './racecar.jpg'
+draft: false
 ---
 
 # H1

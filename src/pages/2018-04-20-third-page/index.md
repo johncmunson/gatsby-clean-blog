@@ -5,6 +5,7 @@ path: '/third-page/'
 tags: ['third', 'page']
 excerpt: 'The third page comes after the second page.'
 cover: './racecar.jpg'
+draft: false
 ---
 
 1. First ordered list item

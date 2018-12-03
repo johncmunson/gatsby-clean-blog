@@ -72,6 +72,7 @@ exports.createPages = ({ actions, graphql }) => {
               title
               excerpt
               tags
+              draft
             }
           }
         }
@@ -84,9 +85,12 @@ exports.createPages = ({ actions, graphql }) => {
 
     const posts = result.data.allMarkdownRemark.edges
 
-    // createTagPages(createPage, posts)
+    const allowedPosts = posts.filter(
+      post =>
+        process.env.NODE_ENV === 'development' || !post.node.frontmatter.draft
+    )
 
-    posts.forEach(({ node }, index) => {
+    allowedPosts.forEach(({ node }, index) => {
       createPage({
         path: node.frontmatter.path,
         component: blogPostTemplate,
@@ -96,5 +100,7 @@ exports.createPages = ({ actions, graphql }) => {
         }
       })
     })
+
+    // createTagPages(createPage, allowedPosts)
   })
 }

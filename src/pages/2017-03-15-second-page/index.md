@@ -5,6 +5,7 @@ path: '/second-page/'
 tags: ['second', 'page']
 excerpt: 'The second page comes after the first page, but before the third.'
 cover: './racecar.jpg'
+draft: false
 ---
 
 Emphasis, aka italics, with _asterisks_ or _underscores_.

@@ -62,7 +62,9 @@ const getRenderAst = components =>
   }).Compiler
 
 // Currently not being used, but is useful for
-// gernerating numbered headings
+// gernerating numbered headings. To use, include
+// this line in the render method of <Template>...
+// if (headings.length) generateHeadingNumbers(headings)
 const generateHeadingNumbers = headings => {
   let stack = []
   headings.forEach(heading => {
@@ -170,7 +172,6 @@ class Template extends Component {
     const { title, date, path, tags, excerpt, cover } = frontmatter
     const { next, prev } = this.props.pageContext
     const location = this.props.location
-    if (headings.length) generateHeadingNumbers(headings)
     return (
       <Layout
         location={location}
