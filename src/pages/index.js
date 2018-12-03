@@ -6,47 +6,56 @@ import { rhythm } from '../utils/typography'
 import Layout from '../components/layout'
 import CoverImage from '../components/cover-image'
 
-const IndexPage = ({ data, location }) => (
-  <Layout location={location}>
-    <Bio />
-    {data.allMarkdownRemark.edges.map(({ node }) => (
-      <div key={node.id}>
-        {data.site.siteMetadata.homepageCoverImages ? (
-          <CoverImage
-            img={node.frontmatter.cover.childImageSharp.fluid}
-            title={node.frontmatter.title}
-            date={node.frontmatter.date}
-            to={node.frontmatter.path}
+const IndexPage = ({ data, location }) => {
+  const posts = data.allMarkdownRemark.edges
+  const allowedPosts = posts.filter(post => {
+    if (process.env.NODE_ENV === 'production' && post.node.frontmatter.draft) {
+      return false
+    }
+    return true
+  })
+  return (
+    <Layout location={location}>
+      <Bio />
+      {allowedPosts.map(({ node }) => (
+        <div key={node.id}>
+          {data.site.siteMetadata.homepageCoverImages ? (
+            <CoverImage
+              img={node.frontmatter.cover.childImageSharp.fluid}
+              title={node.frontmatter.title}
+              date={node.frontmatter.date}
+              to={node.frontmatter.path}
+            />
+          ) : (
+            <>
+              <h4
+                style={{
+                  marginBottom: rhythm(1 / 12)
+                }}
+              >
+                <Link to={node.frontmatter.path}>{node.frontmatter.title}</Link>
+              </h4>
+              <small
+                style={{
+                  display: 'block',
+                  marginBottom: rhythm(1 / 4)
+                }}
+              >
+                {node.frontmatter.date}
+              </small>
+            </>
+          )}
+          <p
+            style={{ marginBottom: `${rhythm(1.5)}` }}
+            dangerouslySetInnerHTML={{
+              __html: node.frontmatter.excerpt || node.excerpt
+            }}
           />
-        ) : (
-          <>
-            <h4
-              style={{
-                marginBottom: rhythm(1 / 12)
-              }}
-            >
-              <Link to={node.frontmatter.path}>{node.frontmatter.title}</Link>
-            </h4>
-            <small
-              style={{
-                display: 'block',
-                marginBottom: rhythm(1 / 4)
-              }}
-            >
-              {node.frontmatter.date}
-            </small>
-          </>
-        )}
-        <p
-          style={{ marginBottom: `${rhythm(1.5)}` }}
-          dangerouslySetInnerHTML={{
-            __html: node.frontmatter.excerpt || node.excerpt
-          }}
-        />
-      </div>
-    ))}
-  </Layout>
-)
+        </div>
+      ))}
+    </Layout>
+  )
+}
 
 export default IndexPage
 
@@ -70,6 +79,7 @@ export const pageQuery = graphql`
             path
             excerpt
             tags
+            draft
             cover {
               childImageSharp {
                 fluid(
@@ -88,13 +98,3 @@ export const pageQuery = graphql`
     }
   }
 `
-
-// WHAT THE TITLE AND DATE LOOKED LIKE BEFORE THE COVER IMAGE
-// <h4
-//   style={{
-//     marginBottom: rhythm(1 / 4)
-//   }}
-// >
-//   <Link to={node.frontmatter.path}>{node.frontmatter.title}</Link>
-// </h4>
-// <small>{node.frontmatter.date}</small>

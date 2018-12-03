@@ -277,6 +277,10 @@ class Template extends Component {
   }
 }
 
+// markdownRemark(
+//   frontmatter: { path: { eq: $path } }
+//   filter: { frontmatter: { draft: { ne: true } } }
+// ) {
 export const pageQuery = graphql`
   query BlogPostByPath($path: String!) {
     site {

@@ -85,18 +85,26 @@ exports.createPages = ({ actions, graphql }) => {
 
     const posts = result.data.allMarkdownRemark.edges
 
-    const allowedPosts = posts.filter(
-      post =>
-        process.env.NODE_ENV === 'development' || !post.node.frontmatter.draft
-    )
+    const allowedPosts = posts.filter(post => {
+      if (
+        process.env.NODE_ENV === 'production' &&
+        post.node.frontmatter.draft
+      ) {
+        return false
+      }
+      return true
+    })
 
     allowedPosts.forEach(({ node }, index) => {
       createPage({
         path: node.frontmatter.path,
         component: blogPostTemplate,
         context: {
-          prev: index === 0 ? null : posts[index - 1].node,
-          next: index === posts.length - 1 ? null : posts[index + 1].node
+          prev: index === 0 ? null : allowedPosts[index - 1].node,
+          next:
+            index === allowedPosts.length - 1
+              ? null
+              : allowedPosts[index + 1].node
         }
       })
     })
