@@ -239,6 +239,12 @@ class Template extends Component {
               )}
             </li>
           </ul>
+          <div
+            class="just-comments"
+            data-apikey="9443a24b-ca12-45d4-a88f-9dc96c586c36"
+            data-recaptcha="true"
+          />
+          <script async src="https://just-comments.com/w.js" />
         </div>
       </Layout>
     )
@@ -281,18 +287,3 @@ export const pageQuery = graphql`
 `
 
 export default Template
-
-// REPLACE <CoverWrapper> and it's contents with the markup below to get
-// get version w/o the cover image
-// <div
-//   className="post-title"
-//   style={{ marginBottom: '0.2em', ...scale(0.5) }}
-// >
-//   <GhAnchor />
-//   <i>
-//     <b>{title}</b>
-//   </i>
-// </div>
-// <Text size="0.8em" style={{ paddingBottom: `${rhythm(1.5)}` }}>
-//   <i>{date}</i>
-// </Text>
