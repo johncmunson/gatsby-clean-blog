@@ -1,4 +1,4 @@
-import React, { Component, createElement } from 'react'
+import React, { Component, createElement, createRef } from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../components/layout'
 import Link from '../components/link'
@@ -61,6 +61,8 @@ const getRenderAst = components =>
     components: components
   }).Compiler
 
+// Currently not being used, but is useful for
+// gernerating numbered headings
 const generateHeadingNumbers = headings => {
   let stack = []
   headings.forEach(heading => {
@@ -77,6 +79,31 @@ const generateHeadingNumbers = headings => {
     }
     heading.tocNumber = stack.join('.')
   })
+}
+
+class JustComments extends Component {
+  constructor(...args) {
+    super(...args)
+    this.ref = createRef()
+  }
+  render() {
+    return (
+      <div
+        ref={this.ref}
+        className="just-comments"
+        data-pagesize="10"
+        data-disableprofilepictures="true"
+        data-disablesharebutton="true"
+        data-apikey="9443a24b-ca12-45d4-a88f-9dc96c586c36"
+      />
+    )
+  }
+  componentDidMount() {
+    const s = document.createElement('script')
+    s.src = '//just-comments.com/w.js'
+    s.setAttribute('data-timestamp', +new Date())
+    this.ref.current.appendChild(s)
+  }
 }
 
 class Template extends Component {
@@ -239,12 +266,7 @@ class Template extends Component {
               )}
             </li>
           </ul>
-          <div
-            class="just-comments"
-            data-apikey="9443a24b-ca12-45d4-a88f-9dc96c586c36"
-            data-recaptcha="true"
-          />
-          <script async src="https://just-comments.com/w.js" />
+          <JustComments />
         </div>
       </Layout>
     )
