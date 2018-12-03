@@ -91,7 +91,8 @@ class JustComments extends Component {
       <div
         ref={this.ref}
         className="just-comments"
-        data-pagesize="10"
+        data-pagesize="25"
+        data-sort="desc"
         data-disableprofilepictures="true"
         data-disablesharebutton="true"
         data-apikey="9443a24b-ca12-45d4-a88f-9dc96c586c36"
@@ -266,7 +267,9 @@ class Template extends Component {
               )}
             </li>
           </ul>
-          <JustComments />
+          <div style={{ marginTop: rhythm(1) }}>
+            <JustComments />
+          </div>
         </div>
       </Layout>
     )
@@ -299,7 +302,7 @@ export const pageQuery = graphql`
         cover {
           childImageSharp {
             fluid(maxWidth: 1000, quality: 90, traceSVG: { color: "#2B2B2F" }) {
-              ...GatsbyImageSharpFluid_withWebp_tracedSVG
+              ...GatsbyImageSharpFluid_withWebp
             }
           }
         }

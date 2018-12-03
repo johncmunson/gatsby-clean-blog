@@ -77,7 +77,7 @@ export const pageQuery = graphql`
                   quality: 90
                   traceSVG: { color: "#2B2B2F" }
                 ) {
-                  ...GatsbyImageSharpFluid_withWebp_tracedSVG
+                  ...GatsbyImageSharpFluid_withWebp
                 }
               }
             }
