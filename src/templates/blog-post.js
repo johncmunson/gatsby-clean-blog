@@ -10,12 +10,17 @@ import Img from 'gatsby-image'
 import CoverImage from '../components/cover-image'
 import styled from 'styled-components'
 import { rhythm, scale } from '../utils/typography'
-import slugify from '@sindresorhus/slugify'
+import { default as _slugify } from '@sindresorhus/slugify'
 import StickyBox from 'react-sticky-box'
 import { Link as ScrollLink, Events } from 'react-scroll'
 import Observer from '@researchgate/react-intersection-observer'
 import rehypeReact from 'rehype-react'
 import './blog-post.css'
+
+let slugify = str =>
+  _slugify(str, {
+    customReplacements: [["'", ''], ['’', '']]
+  })
 
 const NavLink = styled(ScrollLink)`
   box-shadow: none;
@@ -30,8 +35,10 @@ const NavLink = styled(ScrollLink)`
   }
 `
 
-const NavHeadings = ({ headings, activeNavHeading }) =>
-  headings.map((heading, i) => (
+const NavHeadings = ({ headings, activeNavHeading }) => {
+  console.log(slugify(headings[headings.length - 1].value))
+
+  return headings.map((heading, i) => (
     <NavLink
       key={i}
       className={
@@ -42,12 +49,15 @@ const NavHeadings = ({ headings, activeNavHeading }) =>
       smooth={true}
       offset={-80}
     >
-      <Text size="0.7em" style={{ lineHeight: 1.2, marginBottom: '0.5em' }}>
-        <span style={{ marginRight: '0.3em' }} />
-        <span>{heading.value}</span>
+      <Text
+        size="0.7em"
+        style={{ lineHeight: 1.2, marginBottom: '0.5em', paddingLeft: '0.3em' }}
+      >
+        {heading.value}
       </Text>
     </NavLink>
   ))
+}
 
 const getObservedHeading = (el, onChange) => ({ id, children }) => (
   <Observer onChange={e => onChange(e, id)} rootMargin="0% 0% -85%">
@@ -169,14 +179,14 @@ class Template extends Component {
   render() {
     const { markdownRemark: post, site } = this.props.data
     const { frontmatter, html, htmlAst, headings } = post
-    const { title, date, path, tags, excerpt, cover } = frontmatter
+    const { title, date, path, tags, excerpt, cover, nav } = frontmatter
     const { next, prev } = this.props.pageContext
     const location = this.props.location
     return (
       <Layout
         location={location}
         renderNav={() => {
-          if (headings.length) {
+          if (headings.length && nav) {
             return (
               <StickyBox
                 offsetTop={5}
@@ -295,7 +305,6 @@ export const pageQuery = graphql`
         value
         depth
       }
-      tableOfContents
       frontmatter {
         title
         date(formatString: "MMMM DD, YYYY")
@@ -309,6 +318,7 @@ export const pageQuery = graphql`
             }
           }
         }
+        nav
       }
     }
   }
