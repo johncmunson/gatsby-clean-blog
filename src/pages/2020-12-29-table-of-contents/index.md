@@ -4,7 +4,7 @@ date: '2020-12-29'
 path: '/table-of-contents/'
 tags: ['table of contents']
 excerpt: "Oftentimes, it's helpful to include a table of contents with your blog post, especially if the post is long and/or you'd like to provide hyperlinks to specific portions the post."
-cover: './new-york.jpg'
+cover: './cave.jpg'
 draft: false
 ---
 

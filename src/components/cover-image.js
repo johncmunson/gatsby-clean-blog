@@ -69,7 +69,7 @@ export default ({ img, title, date, to }) => {
   }
   return (
     <CoverWrapper to={to}>
-      <Img fluid={img} style={{ borderRadius: '0.2em' }} />
+      <Img fluid={img} style={{ borderRadius: '0.15em' }} />
       <CoverText>
         <Text
           size="0.8em"

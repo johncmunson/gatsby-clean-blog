@@ -4,8 +4,8 @@ date: '2018-05-09'
 path: '/racecar/'
 tags: ['racecar']
 excerpt: 'This is a racecar.'
-cover: './racecar.jpg'
+cover: './mountain.jpg'
 draft: true
 ---
 
-![alt text](./racecar.jpg)
+![alt text](./mountain.jpg)

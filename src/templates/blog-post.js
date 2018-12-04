@@ -277,10 +277,8 @@ class Template extends Component {
   }
 }
 
-// markdownRemark(
-//   frontmatter: { path: { eq: $path } }
-//   filter: { frontmatter: { draft: { ne: true } } }
-// ) {
+export default Template
+
 export const pageQuery = graphql`
   query BlogPostByPath($path: String!) {
     site {
@@ -306,7 +304,7 @@ export const pageQuery = graphql`
         excerpt
         cover {
           childImageSharp {
-            fluid(maxWidth: 1000, quality: 90, traceSVG: { color: "#2B2B2F" }) {
+            fluid(maxWidth: 700, maxHeight: 432) {
               ...GatsbyImageSharpFluid_withWebp
             }
           }
@@ -315,5 +313,3 @@ export const pageQuery = graphql`
     }
   }
 `
-
-export default Template

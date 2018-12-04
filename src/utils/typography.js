@@ -11,17 +11,20 @@ const typography = new Typography({
   bodyGray: 20,
   blockMarginBottom: 1,
   includeNormalize: true,
-  // HACK: This is necessary until typography.js natively supports breakpoints
-  //       and CSS locks. Alternatively, you could use the same CSS as below in
-  //       a stylesheet in conjunction with !important declarations.
-  //       https://github.com/KyleAMathews/typography.js/issues/75
   overrideStyles: ({ adjustFontSizeTo, rhythm }, options, styles) => ({
     html: {
       fontSize: '2.4vw',
       textRendering: 'optimizeLegibility'
     },
-    '@media all and (min-width: 1000px) {html{font-size: 24px}}': {},
-    '@media all and (max-width: 520px) {html{font-size: 18px}}': {}
+    '.gatsby-resp-image-image, .gatsby-resp-image-background-image, .gatsby-resp-image-wrapper': {
+      borderRadius: '0.15em'
+    },
+    '@media all and (min-width: 1000px)': {
+      html: { fontSize: '24px' }
+    },
+    '@media all and (max-width: 520px)': {
+      html: { fontSize: '18px' }
+    }
   })
 })
 

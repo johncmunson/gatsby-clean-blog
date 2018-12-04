@@ -4,7 +4,7 @@ date: '2018-04-20'
 path: '/third-page/'
 tags: ['third', 'page']
 excerpt: 'The third page comes after the second page.'
-cover: './racecar.jpg'
+cover: './salt_lake.jpg'
 draft: false
 ---
 
