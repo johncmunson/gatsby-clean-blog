@@ -4,6 +4,7 @@ import Layout from '../components/layout'
 import Link from '../components/link'
 import Helmet from 'react-helmet'
 import Bio from '../components/bio'
+import Tags from '../components/Tags'
 import Text from '../components/text'
 import GhAnchor from '../components/gh-anchor'
 import Img from 'gatsby-image'
@@ -35,10 +36,8 @@ const NavLink = styled(ScrollLink)`
   }
 `
 
-const NavHeadings = ({ headings, activeNavHeading }) => {
-  console.log(slugify(headings[headings.length - 1].value))
-
-  return headings.map((heading, i) => (
+const NavHeadings = ({ headings, activeNavHeading }) =>
+  headings.map((heading, i) => (
     <NavLink
       key={i}
       className={
@@ -57,7 +56,6 @@ const NavHeadings = ({ headings, activeNavHeading }) => {
       </Text>
     </NavLink>
   ))
-}
 
 const getObservedHeading = (el, onChange) => ({ id, children }) => (
   <Observer onChange={e => onChange(e, id)} rootMargin="0% 0% -85%">
@@ -119,7 +117,7 @@ class JustComments extends Component {
   }
 }
 
-class Template extends Component {
+class BlogPostTemplate extends Component {
   state = {
     activeNavHeading: this.props.data.markdownRemark.headings.length
       ? slugify(this.props.data.markdownRemark.headings[0].value)
@@ -243,6 +241,10 @@ class Template extends Component {
           <div style={{ marginBottom: rhythm(2) }}>
             {getRenderAst(this.markdownToComponentMap)(htmlAst)}
           </div>
+          <Tags
+            list={tags}
+            style={{ marginBottom: rhythm(2), fontStyle: 'italic' }}
+          />
           <Bio />
           <hr />
           <ul
@@ -287,7 +289,7 @@ class Template extends Component {
   }
 }
 
-export default Template
+export default BlogPostTemplate
 
 export const pageQuery = graphql`
   query BlogPostByPath($path: String!) {

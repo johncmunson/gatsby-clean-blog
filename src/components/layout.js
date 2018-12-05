@@ -94,7 +94,7 @@ class Layout extends Component {
               </Hide>
               <div
                 style={{
-                  maxWidth: rhythm(22),
+                  width: rhythm(22),
                   padding: `${rhythm(1.5)} ${rhythm(3 / 4)}`
                 }}
               >
