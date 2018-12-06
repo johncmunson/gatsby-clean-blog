@@ -1,8 +1,8 @@
+const config = require('./config.js')
+
 module.exports = {
   siteMetadata: {
-    title: 'gatsby clean blog',
-    homepageCoverImages: true,
-    blogPostCoverImages: true
+    ...config
   },
   plugins: [
     `gatsby-plugin-styled-components`,

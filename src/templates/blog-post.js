@@ -9,6 +9,7 @@ import Text from '../components/text'
 import GhAnchor from '../components/gh-anchor'
 import Img from 'gatsby-image'
 import CoverImage from '../components/cover-image'
+import Flippers from '../components/flippers'
 import styled from 'styled-components'
 import { rhythm, scale } from '../utils/typography'
 import { default as _slugify } from '@sindresorhus/slugify'
@@ -18,6 +19,10 @@ import Observer from '@researchgate/react-intersection-observer'
 import rehypeReact from 'rehype-react'
 import './blog-post.css'
 
+// Necessary b/c slugify replaces single quotes and apostrophes
+// with a dash "-". This differs from how gatsby-remark-autolink-headers
+// generates permalinks. W/o the custom replacements below, the visual
+// indicator in the table of contents breaks.
 let slugify = str =>
   _slugify(str, {
     customReplacements: [["'", ''], ['’', '']]
@@ -247,39 +252,10 @@ class BlogPostTemplate extends Component {
           />
           <Bio />
           <hr />
-          <ul
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'space-between',
-              listStyle: 'none',
-              padding: 0,
-              margin: 0
-            }}
-          >
-            <li>
-              {prev && (
-                <Link to={prev.frontmatter.path} rel="prev">
-                  <small style={{ letterSpacing: 1.2 }}>
-                    <i>
-                      <b>← Previous</b>
-                    </i>
-                  </small>
-                </Link>
-              )}
-            </li>
-            <li>
-              {next && (
-                <Link to={next.frontmatter.path} rel="next">
-                  <small style={{ letterSpacing: 1.2 }}>
-                    <i>
-                      <b>Next →</b>
-                    </i>
-                  </small>
-                </Link>
-              )}
-            </li>
-          </ul>
+          <Flippers
+            prevPath={prev && prev.frontmatter.path}
+            nextPath={next && next.frontmatter.path}
+          />
           <div style={{ marginTop: rhythm(1) }}>
             <JustComments />
           </div>

@@ -7,13 +7,13 @@
 // You can delete this file if you're not using it
 
 const path = require('path')
+const { createFilePath } = require('gatsby-source-filesystem')
+const config = require('./config.js')
 
 const createTagPages = (createPage, posts) => {
   const tagTemplate = path.resolve(`src/templates/tag.js`)
   const tagIndexTemplate = path.resolve(`src/templates/tag-index.js`)
-
   const postsByTags = {}
-
   posts.forEach(({ node }) => {
     if (node.frontmatter.tags) {
       node.frontmatter.tags.forEach(tag => {
@@ -25,9 +25,7 @@ const createTagPages = (createPage, posts) => {
       })
     }
   })
-
   const tags = Object.keys(postsByTags)
-
   createPage({
     path: `/tags`,
     component: tagIndexTemplate,
@@ -35,10 +33,8 @@ const createTagPages = (createPage, posts) => {
       tags: tags.sort()
     }
   })
-
   tags.forEach(tagName => {
     const posts = postsByTags[tagName]
-
     createPage({
       path: `/tags/${tagName}`,
       component: tagTemplate,
@@ -53,7 +49,7 @@ const createTagPages = (createPage, posts) => {
 exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions
   const blogPostTemplate = path.resolve(`src/templates/blog-post.js`)
-
+  const homePageTemplate = path.resolve('./src/templates/home.js')
   return graphql(`
     {
       allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
@@ -82,9 +78,7 @@ exports.createPages = ({ actions, graphql }) => {
     if (result.errors) {
       return Promise.reject(result.errors)
     }
-
     const posts = result.data.allMarkdownRemark.edges
-
     const allowedPosts = posts.filter(post => {
       if (
         process.env.NODE_ENV === 'production' &&
@@ -94,7 +88,8 @@ exports.createPages = ({ actions, graphql }) => {
       }
       return true
     })
-
+    const postsPerPage = config.postsPerPage
+    const numPages = Math.ceil(posts.length / postsPerPage)
     allowedPosts.forEach(({ node }, index) => {
       createPage({
         path: node.frontmatter.path,
@@ -108,7 +103,30 @@ exports.createPages = ({ actions, graphql }) => {
         }
       })
     })
-
     createTagPages(createPage, allowedPosts)
+    Array.from({ length: numPages }).forEach((_, i) => {
+      createPage({
+        path: i === 0 ? `/` : `/${i + 1}`,
+        component: homePageTemplate,
+        context: {
+          limit: postsPerPage,
+          skip: i * postsPerPage,
+          numPages,
+          currentPage: i + 1
+        }
+      })
+    })
   })
+}
+
+exports.onCreateNode = ({ node, actions, getNode }) => {
+  const { createNodeField } = actions
+  if (node.internal.type === `MarkdownRemark`) {
+    const value = createFilePath({ node, getNode })
+    createNodeField({
+      name: 'slug',
+      node,
+      value
+    })
+  }
 }
