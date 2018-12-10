@@ -10,6 +10,8 @@ const ReactGA = require('react-ga')
 ReactGA.initialize('UA-130692445-1')
 
 exports.onRouteUpdate = (state, page, pages) => {
-  process.env.NODE_ENV === 'production' &&
+  if (process.env.NODE_ENV === 'production') {
+    console.log('fired')
     ReactGA.pageview(state.location.pathname)
+  }
 }
