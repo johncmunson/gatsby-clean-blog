@@ -6,9 +6,33 @@
 
 // You can delete this file if you're not using it
 
+require('dotenv').config()
 const path = require('path')
 const { createFilePath } = require('gatsby-source-filesystem')
 const config = require('./config.js')
+
+const _ = require('lodash')
+const { google } = require('googleapis')
+const scopes = ['https://www.googleapis.com/auth/analytics.readonly']
+const jwt = new google.auth.JWT(
+  process.env.CLIENT_EMAIL,
+  null,
+  _.replace(process.env.PRIVATE_KEY, /\\n/g, '\n'),
+  scopes
+)
+const view_id = process.env.VIEW_ID
+async function getData() {
+  const response = await jwt.authorize()
+  const result = await google.analytics('v3').data.ga.get({
+    auth: jwt,
+    ids: 'ga:' + view_id,
+    'start-date': '30daysAgo',
+    'end-date': 'today',
+    metrics: 'ga:pageviews'
+  })
+  console.dir(result)
+}
+getData()
 
 const createTagPages = (createPage, posts) => {
   const tagTemplate = path.resolve(`src/templates/tag.js`)
