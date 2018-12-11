@@ -18,3 +18,13 @@ exports.onRouteUpdate = (state, page, pages) => {
     ReactGA.pageview(state.location.pathname)
   }
 }
+
+const getPolyfills = () => {
+  if (!('IntersectionObserver' in window)) {
+    require('intersection-observer')
+  }
+}
+
+exports.onClientEntry = () => {
+  getPolyfills()
+}
