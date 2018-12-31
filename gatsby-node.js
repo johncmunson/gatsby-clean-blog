@@ -104,7 +104,7 @@ const createTagPages = (createPage, posts, pageViews) => {
   })
 }
 
-const createHomePages = (createPage, posts) => {
+const createHomePages = (createPage, posts, pageViews) => {
   const postsPerPage = config.postsPerPage
   const numPages = Math.ceil(posts.length / postsPerPage)
   Array.from({ length: numPages }).forEach((_, i) => {
