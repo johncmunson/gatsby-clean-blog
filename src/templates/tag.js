@@ -3,7 +3,7 @@ import Layout from '../components/layout'
 import Link from '../components/link'
 
 const TagTemplate = ({ pageContext, location }) => {
-  const { posts = [], tagName } = pageContext
+  const { posts = [], tagName, pageViews } = pageContext
   return (
     <Layout location={location}>
       <span>Posts about {tagName}:</span>

@@ -183,7 +183,7 @@ class BlogPostTemplate extends Component {
     const { markdownRemark: post, site } = this.props.data
     const { frontmatter, html, htmlAst, headings } = post
     const { title, date, path, tags, excerpt, cover, nav } = frontmatter
-    const { next, prev } = this.props.pageContext
+    const { next, prev, pageViews } = this.props.pageContext
     const location = this.props.location
     return (
       <Layout

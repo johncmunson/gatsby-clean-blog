@@ -8,7 +8,7 @@ import CoverImage from '../components/cover-image'
 import Flippers from '../components/flippers'
 
 const IndexPage = ({ data, location, pageContext }) => {
-  const { currentPage, limit, numPages, skip } = pageContext
+  const { currentPage, limit, numPages, skip, pageViews } = pageContext
   const posts = data.allMarkdownRemark.edges
   const allowedPosts = posts.filter(post => {
     if (process.env.NODE_ENV === 'production' && post.node.frontmatter.draft) {
@@ -21,7 +21,7 @@ const IndexPage = ({ data, location, pageContext }) => {
       ? null
       : currentPage === 2
         ? `/`
-        : `/${currentPage - 1}`
+        : `/${currentPage - 1}/`
   }
   function getNextPath() {
     return currentPage === numPages ? null : `/${currentPage + 1}`

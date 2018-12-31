@@ -8,7 +8,7 @@ export default function Tags({ list = [], ...props }) {
       <span>
         {list.map((tag, i) => (
           <Fragment key={i}>
-            <Link to={`/tags/${tag}`} style={{ textDecoration: 'underline' }}>
+            <Link to={`/tags/${tag}/`} style={{ textDecoration: 'underline' }}>
               {tag}
             </Link>
             {i !== list.length - 1 && <span>, </span>}

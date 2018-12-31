@@ -1,40 +1,73 @@
-/**
- * Implement Gatsby's Node APIs in this file.
- *
- * See: https://www.gatsbyjs.org/docs/node-apis/
- */
-
-// You can delete this file if you're not using it
-
+// Make environment variables defined in .env available on process.env
 require('dotenv').config()
+
+// Modules
 const path = require('path')
 const { createFilePath } = require('gatsby-source-filesystem')
 const config = require('./config.js')
-
+const eyes = require('eyes')
 const _ = require('lodash')
 const { google } = require('googleapis')
+
+// Templates
+const blogPostTemplate = path.resolve(`src/templates/blog-post.js`)
+const homePageTemplate = path.resolve('./src/templates/home.js')
+
+// Analytics
 const scopes = ['https://www.googleapis.com/auth/analytics.readonly']
+const view_id = process.env.VIEW_ID
 const jwt = new google.auth.JWT(
   process.env.CLIENT_EMAIL,
   null,
   _.replace(process.env.PRIVATE_KEY, /\\n/g, '\n'),
   scopes
 )
-const view_id = process.env.VIEW_ID
-async function getData() {
+
+async function getPageViews(startDate) {
   const response = await jwt.authorize()
-  const result = await google.analytics('v3').data.ga.get({
+  const results = await google.analytics('v3').data.ga.get({
     auth: jwt,
     ids: 'ga:' + view_id,
-    'start-date': '30daysAgo',
-    'end-date': 'today',
-    metrics: 'ga:pageviews'
+    metrics: 'ga:uniquePageviews',
+    dimensions: 'ga:pagePath',
+    'start-date': startDate,
+    'end-date': 'yesterday',
+    sort: '-ga:uniquePageviews',
+    'max-results': 10
   })
-  console.dir(result)
+  return results.data.rows
 }
-getData()
 
-const createTagPages = (createPage, posts) => {
+function removeNonPostPagesFromAnalytics(el) {
+  let relUrl = el[0]
+  let parts = relUrl.split('/')
+  if (relUrl === '/' || relUrl === '/abcxyz' || relUrl === '/abc') {
+    return false
+  }
+  if (parts[1] === 'tags') {
+    return false
+  }
+  if (Number(parts[1])) {
+    return false
+  }
+  return true
+}
+
+const createPostPages = (createPage, posts, pageViews) => {
+  posts.forEach(({ node }, index) => {
+    createPage({
+      path: node.frontmatter.path,
+      component: blogPostTemplate,
+      context: {
+        prev: index === 0 ? null : posts[index - 1].node,
+        next: index === posts.length - 1 ? null : posts[index + 1].node,
+        pageViews
+      }
+    })
+  })
+}
+
+const createTagPages = (createPage, posts, pageViews) => {
   const tagTemplate = path.resolve(`src/templates/tag.js`)
   const tagIndexTemplate = path.resolve(`src/templates/tag-index.js`)
   const postsByTags = {}
@@ -44,37 +77,54 @@ const createTagPages = (createPage, posts) => {
         if (!postsByTags[tag]) {
           postsByTags[tag] = []
         }
-
         postsByTags[tag].push(node)
       })
     }
   })
   const tags = Object.keys(postsByTags)
   createPage({
-    path: `/tags`,
+    path: `/tags/`,
     component: tagIndexTemplate,
     context: {
-      tags: tags.sort()
+      tags: tags.sort(),
+      pageViews
     }
   })
   tags.forEach(tagName => {
     const posts = postsByTags[tagName]
     createPage({
-      path: `/tags/${tagName}`,
+      path: `/tags/${tagName}/`,
       component: tagTemplate,
       context: {
         posts,
-        tagName
+        tagName,
+        pageViews
       }
     })
   })
 }
 
-exports.createPages = ({ actions, graphql }) => {
+const createHomePages = (createPage, posts) => {
+  const postsPerPage = config.postsPerPage
+  const numPages = Math.ceil(posts.length / postsPerPage)
+  Array.from({ length: numPages }).forEach((_, i) => {
+    createPage({
+      path: i === 0 ? `/` : `/${i + 1}/`,
+      component: homePageTemplate,
+      context: {
+        limit: postsPerPage,
+        skip: i * postsPerPage,
+        numPages,
+        currentPage: i + 1,
+        pageViews
+      }
+    })
+  })
+}
+
+exports.createPages = async ({ actions, graphql }) => {
   const { createPage } = actions
-  const blogPostTemplate = path.resolve(`src/templates/blog-post.js`)
-  const homePageTemplate = path.resolve('./src/templates/home.js')
-  return graphql(`
+  const result = await graphql(`
     {
       allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
         edges {
@@ -98,49 +148,28 @@ exports.createPages = ({ actions, graphql }) => {
         }
       }
     }
-  `).then(result => {
-    if (result.errors) {
-      return Promise.reject(result.errors)
+  `)
+  // After converting exports.createPages from promises to async/await, I'm
+  // not quite sure if this is the correct way to perform error handling.
+  if (result.errors) {
+    return Promise.reject(result.errors)
+  }
+  const posts = result.data.allMarkdownRemark.edges
+  const allowedPosts = posts.filter(post => {
+    if (process.env.NODE_ENV === 'production' && post.node.frontmatter.draft) {
+      return false
     }
-    const posts = result.data.allMarkdownRemark.edges
-    const allowedPosts = posts.filter(post => {
-      if (
-        process.env.NODE_ENV === 'production' &&
-        post.node.frontmatter.draft
-      ) {
-        return false
-      }
-      return true
-    })
-    const postsPerPage = config.postsPerPage
-    const numPages = Math.ceil(posts.length / postsPerPage)
-    allowedPosts.forEach(({ node }, index) => {
-      createPage({
-        path: node.frontmatter.path,
-        component: blogPostTemplate,
-        context: {
-          prev: index === 0 ? null : allowedPosts[index - 1].node,
-          next:
-            index === allowedPosts.length - 1
-              ? null
-              : allowedPosts[index + 1].node
-        }
-      })
-    })
-    createTagPages(createPage, allowedPosts)
-    Array.from({ length: numPages }).forEach((_, i) => {
-      createPage({
-        path: i === 0 ? `/` : `/${i + 1}/`,
-        component: homePageTemplate,
-        context: {
-          limit: postsPerPage,
-          skip: i * postsPerPage,
-          numPages,
-          currentPage: i + 1
-        }
-      })
-    })
+    return true
   })
+  const trending = await getPageViews('30daysAgo')
+  const allTime = await getPageViews('2005-01-01')
+  const pageViews = {
+    trending: trending.filter(removeNonPostPagesFromAnalytics),
+    allTime: allTime.filter(removeNonPostPagesFromAnalytics)
+  }
+  createPostPages(createPage, allowedPosts, pageViews)
+  createTagPages(createPage, allowedPosts, pageViews)
+  createHomePages(createPage, allowedPosts, pageViews)
 }
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
