@@ -6,9 +6,11 @@ import { rhythm } from '../utils/typography'
 import Layout from '../components/layout'
 import CoverImage from '../components/cover-image'
 import Flippers from '../components/flippers'
+import { slugToTitleCase } from '../utils'
 
 const IndexPage = ({ data, location, pageContext }) => {
   const { currentPage, limit, numPages, skip, pageViews } = pageContext
+  pageViews.allTime.forEach(pv => console.log(slugToTitleCase(pv[0])))
   const posts = data.allMarkdownRemark.edges
   const allowedPosts = posts.filter(post => {
     if (process.env.NODE_ENV === 'production' && post.node.frontmatter.draft) {
