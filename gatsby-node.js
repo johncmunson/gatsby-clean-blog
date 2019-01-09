@@ -33,7 +33,7 @@ async function getPageViews(startDate) {
     'start-date': startDate,
     'end-date': 'yesterday',
     sort: '-ga:uniquePageviews',
-    'max-results': 10
+    'max-results': 50
   })
   return results.data.rows
 }
@@ -164,8 +164,8 @@ exports.createPages = async ({ actions, graphql }) => {
   const trending = await getPageViews('30daysAgo')
   const allTime = await getPageViews('2005-01-01')
   const pageViews = {
-    trending: trending.filter(removeNonPostPagesFromAnalytics),
-    allTime: allTime.filter(removeNonPostPagesFromAnalytics)
+    trending: trending.filter(removeNonPostPagesFromAnalytics).slice(0, 10),
+    allTime: allTime.filter(removeNonPostPagesFromAnalytics).slice(0, 10)
   }
   createPostPages(createPage, allowedPosts, pageViews)
   createTagPages(createPage, allowedPosts, pageViews)

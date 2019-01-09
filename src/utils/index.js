@@ -1,4 +1,5 @@
 import { compose } from 'lodash/fp'
+import { default as _slugify } from '@sindresorhus/slugify'
 
 // function compose() {
 //   var fns = arguments
@@ -81,6 +82,15 @@ export const titleCase = str => {
       return all.toUpperCase()
     })
 }
+
+// Necessary b/c slugify replaces single quotes and apostrophes
+// with a dash "-". This differs from how gatsby-remark-autolink-headers
+// generates permalinks. W/o the custom replacements below, the visual
+// indicator in the table of contents breaks.
+export const slugify = str =>
+  _slugify(str, {
+    customReplacements: [["'", ''], ['’', '']]
+  })
 
 export const slugToTitle = slug =>
   slug
