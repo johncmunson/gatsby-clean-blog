@@ -8,6 +8,7 @@ module.exports = {
     `gatsby-plugin-styled-components`,
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-react-svg',
+    `gatsby-plugin-lodash`,
     {
       resolve: 'gatsby-plugin-typography',
       options: {

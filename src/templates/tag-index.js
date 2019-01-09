@@ -3,14 +3,14 @@ import Layout from '../components/layout'
 import Link from '../components/link'
 
 const TagIndexTemplate = ({ pageContext, location }) => {
-  const { tags } = pageContext
+  const { tags, pageViews } = pageContext
   return (
     <Layout location={location}>
       <ul>
         {tags.map(tag => {
           return (
             <li key={tag}>
-              <Link to={`/tags/${tag}`}>{tag}</Link>
+              <Link to={`/tags/${tag}/`}>{tag}</Link>
             </li>
           )
         })}

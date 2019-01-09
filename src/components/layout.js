@@ -39,7 +39,12 @@ class Layout extends Component {
   setOverlayRef = element => (this.target = element)
   onWheel = e => disableScrollAtTopAndBottom(e, this.target)
   render() {
-    const { children, location, renderNav, renderRelated } = this.props
+    const {
+      children,
+      location,
+      renderRightSidebar,
+      renderLeftSidebar
+    } = this.props
     const { overlayActive } = this.state
     const { toggleOverlay, setOverlayRef, onWheel } = this
     return (
@@ -90,7 +95,7 @@ class Layout extends Component {
               }}
             >
               <Hide style={{ width: rhythm(10), marginRight: '1.5em' }}>
-                {renderRelated && renderRelated()}
+                {renderLeftSidebar && renderLeftSidebar()}
               </Hide>
               <div
                 style={{
@@ -101,7 +106,7 @@ class Layout extends Component {
                 {children}
               </div>
               <Hide style={{ width: rhythm(10), marginLeft: '1.5em' }}>
-                {renderNav && renderNav()}
+                {renderRightSidebar && renderRightSidebar()}
               </Hide>
             </div>
           </>

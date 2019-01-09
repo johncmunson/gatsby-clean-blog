@@ -15,7 +15,7 @@ export default function Flippers({ prevPath, nextPath }) {
     >
       <li>
         {prevPath && (
-          <Link to={prevPath} rel="prev">
+          <Link to={prevPath}>
             <small style={{ letterSpacing: 1.2 }}>
               <i>
                 <b>← Previous</b>
@@ -26,7 +26,7 @@ export default function Flippers({ prevPath, nextPath }) {
       </li>
       <li>
         {nextPath && (
-          <Link to={nextPath} rel="next">
+          <Link to={nextPath}>
             <small style={{ letterSpacing: 1.2 }}>
               <i>
                 <b>Next →</b>
