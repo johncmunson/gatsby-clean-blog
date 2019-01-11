@@ -57,7 +57,7 @@ const generateHeadingNumbers = headings => {
 }
 
 const sidebarStyles = {
-  marginTop: '11.25em',
+  marginTop: '2em',
   lineHeight: rhythm(1)
 }
 
@@ -131,7 +131,7 @@ class BlogPostTemplate extends Component {
           if (headings.length && nav) {
             return (
               <StickyBox
-                offsetTop={5}
+                offsetTop={8}
                 style={{ ...sidebarStyles, marginLeft: '2em' }}
               >
                 <Toc
@@ -145,10 +145,15 @@ class BlogPostTemplate extends Component {
         renderLeftSidebar={() => {
           if (pageViews) {
             return (
-              <QuickNav
-                pageViews={pageViews}
-                style={{ ...sidebarStyles, marginRight: '2em' }}
-              />
+              <StickyBox
+                offsetTop={8}
+                style={{ ...sidebarStyles, marginLeft: '2em' }}
+              >
+                <QuickNav
+                  pageViews={pageViews}
+                  style={{ ...sidebarStyles, marginRight: '2em' }}
+                />
+              </StickyBox>
             )
           }
         }}
