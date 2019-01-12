@@ -7,7 +7,9 @@ import Bio from '../components/bio'
 import Tags from '../components/tags'
 import Text from '../components/text'
 import JustComments from '../components/just-comments'
+import FancyHr from '../components/fancy-hr'
 import Toc from '../components/toc'
+import MainNav from '../components/main-nav'
 import QuickNav from '../components/quick-nav'
 import GhAnchor from '../components/gh-anchor'
 import Img from 'gatsby-image'
@@ -127,6 +129,20 @@ class BlogPostTemplate extends Component {
     return (
       <Layout
         location={location}
+        renderOverlayContents={() => (
+          <div style={{ marginTop: rhythm(1.5) }}>
+            <MainNav />
+            <FancyHr />
+            <QuickNav
+              pageViews={pageViews}
+              style={{
+                marginTop: '1em',
+                lineHeight: rhythm(1),
+                fontSize: '1em'
+              }}
+            />
+          </div>
+        )}
         renderRightSidebar={() => {
           if (headings.length && nav) {
             return (

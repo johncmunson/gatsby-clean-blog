@@ -5,6 +5,9 @@ import SmallCap from './small-cap'
 import { rhythm, scale } from '../utils/typography'
 import PropTypes from 'prop-types'
 
+// Refactor to use withPrefix()
+// https://www.gatsbyjs.org/docs/gatsby-link/#prefixed-paths-helper
+
 const Header = ({ siteTitle, location, renderIcon, preventScroll }) => {
   const rootPath = `${__PATH_PREFIX__}/`
   const getScale = () => {

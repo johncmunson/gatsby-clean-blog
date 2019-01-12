@@ -19,7 +19,7 @@ const sidebarStyles = `
 `
 
 export const QuickNavLink = styled(Link)`
-  ${baseStyles} ${sidebarStyles};
+  ${baseStyles} ${sidebarStyles}
 `
 
 export const TocLink = styled(ScrollLink)`

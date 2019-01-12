@@ -6,6 +6,9 @@ import { rhythm } from '../utils/typography'
 import Layout from '../components/layout'
 import CoverImage from '../components/cover-image'
 import Flippers from '../components/flippers'
+import MainNav from '../components/main-nav'
+import QuickNav from '../components/quick-nav'
+import FancyHr from '../components/fancy-hr'
 import { slugToTitleCase } from '../utils'
 
 const IndexPage = ({ data, location, pageContext }) => {
@@ -28,7 +31,19 @@ const IndexPage = ({ data, location, pageContext }) => {
     return currentPage === numPages ? null : `/${currentPage + 1}`
   }
   return (
-    <Layout location={location}>
+    <Layout
+      location={location}
+      renderOverlayContents={() => (
+        <div style={{ marginTop: rhythm(1.5) }}>
+          <MainNav location={location} />
+          <FancyHr />
+          <QuickNav
+            pageViews={pageViews}
+            style={{ marginTop: '1em', lineHeight: rhythm(1), fontSize: '1em' }}
+          />
+        </div>
+      )}
+    >
       <Bio />
       {allowedPosts.map(({ node }) => (
         <div key={node.id}>

@@ -42,6 +42,7 @@ class Layout extends Component {
     const {
       children,
       location,
+      renderOverlayContents,
       renderRightSidebar,
       renderLeftSidebar
     } = this.props
@@ -72,10 +73,21 @@ class Layout extends Component {
             <GithubCorner href="https://github.com/johncmunson/gatsby-clean-blog" />
             <Overlay
               ref={setOverlayRef}
-              opacity={overlayActive ? '0.95' : '0'}
+              opacity={overlayActive ? '0.98' : '0'}
               visibility={overlayActive ? 'visible' : 'hidden'}
               onWheel={onWheel}
-            />
+            >
+              <div
+                style={{
+                  margin: `${rhythm(1)} auto`,
+                  maxWidth: rhythm(22),
+                  padding: `${rhythm(1.5)} ${rhythm(3 / 4)}`,
+                  textAlign: 'center'
+                }}
+              >
+                {renderOverlayContents && renderOverlayContents()}
+              </div>
+            </Overlay>
             <Header
               siteTitle={data.site.siteMetadata.title}
               location={location}
