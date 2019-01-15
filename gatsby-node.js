@@ -41,7 +41,14 @@ async function getPageViews(startDate) {
 function removeNonPostPagesFromAnalytics(el) {
   let relUrl = el[0]
   let parts = relUrl.split('/')
-  if (relUrl === '/' || relUrl === '/abcxyz' || relUrl === '/abc') {
+  if (
+    relUrl === '/' ||
+    relUrl === '/abcxyz' ||
+    relUrl === '/abc' ||
+    relUrl === '/about' ||
+    relUrl === '/contact' ||
+    relUrl === '/tags'
+  ) {
     return false
   }
   if (parts[1] === 'tags') {

@@ -14,9 +14,9 @@ const MainNav = ({ location = {} }) => {
       }}
     >
       {!isHomepage && <Link to="/">Home</Link>}
-      <Link to="/about">About</Link>
-      <Link to="/tags">Tag Index</Link>
-      <Link to="/contact">Contact</Link>
+      <Link to="/about/">About</Link>
+      <Link to="/tags/">Tag Index</Link>
+      <Link to="/contact/">Contact</Link>
     </div>
   )
 }

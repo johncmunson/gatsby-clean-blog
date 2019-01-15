@@ -20,6 +20,12 @@ import {
 // 1. THE SELECTED TAB SHOULD PERSIST WHEN A LINK IS CLICKED
 // 2. THE CURSOR SHOULD CHANGE WHEN A TAB IS HOVERED
 
+const TabTitle = styled.span`
+  :hover {
+    cursor: pointer;
+  }
+`
+
 export default class QuickNav extends Component {
   state = { tabIndex: 1 }
   handleTabClick = tabIndex => this.setState({ tabIndex: tabIndex })
@@ -41,13 +47,19 @@ export default class QuickNav extends Component {
             marginBottom: SIDEBAR_LINK_MARGIN_BOTTOM
           }}
         >
-          <span onClick={() => this.handleTabClick(1)} style={getTabStyles(1)}>
+          <TabTitle
+            onClick={() => this.handleTabClick(1)}
+            style={getTabStyles(1)}
+          >
             Trending
-          </span>
+          </TabTitle>
           <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-          <span onClick={() => this.handleTabClick(2)} style={getTabStyles(2)}>
+          <TabTitle
+            onClick={() => this.handleTabClick(2)}
+            style={getTabStyles(2)}
+          >
             All Time
-          </span>
+          </TabTitle>
         </Text>
         {(this.state.tabIndex === 1 ? trending : allTime).map((t, i) => (
           <QuickNavLink key={i} to={t[0]}>

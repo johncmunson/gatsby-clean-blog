@@ -10,6 +10,15 @@ import { disableScrollAtTopAndBottom } from '../utils'
 import BurgerIcon from '../images/baseline-menu-24px.svg'
 import CloseIcon from '../images/baseline-close-24px.svg'
 
+const getHoveredIcon = icon => styled(icon)`
+  :hover {
+    cursor: pointer;
+  }
+`
+
+const Burger = getHoveredIcon(BurgerIcon)
+const Close = getHoveredIcon(CloseIcon)
+
 const Overlay = styled.div`
   height: 100vh;
   width: 100vw;
@@ -94,9 +103,9 @@ class Layout extends Component {
               preventScroll={overlayActive}
               renderIcon={() =>
                 overlayActive ? (
-                  <CloseIcon onClick={toggleOverlay} />
+                  <Close onClick={toggleOverlay} />
                 ) : (
-                  <BurgerIcon onClick={toggleOverlay} />
+                  <Burger onClick={toggleOverlay} />
                 )
               }
             />
