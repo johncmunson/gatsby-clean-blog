@@ -4,10 +4,13 @@ import Link from '../components/link'
 import MainNav from '../components/main-nav'
 import QuickNav from '../components/quick-nav'
 import FancyHr from '../components/fancy-hr'
+import Text from '../components/text'
+import { sortAndGroupByStartingLetter } from '../utils'
 import { rhythm } from '../utils/typography'
 
 const TagIndexTemplate = ({ pageContext, location }) => {
   const { tags, pageViews } = pageContext
+  const groupedTags = sortAndGroupByStartingLetter(tags)
   return (
     <Layout
       location={location}
@@ -22,15 +25,35 @@ const TagIndexTemplate = ({ pageContext, location }) => {
         </div>
       )}
     >
-      <ul>
-        {tags.map(tag => {
-          return (
-            <li key={tag}>
-              <Link to={`/tags/${tag}/`}>{tag}</Link>
-            </li>
-          )
-        })}
-      </ul>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        {Object.keys(groupedTags).map(char => (
+          <div key={char} style={{ marginRight: '2em', marginBottom: '2em' }}>
+            <Text
+              size="1.2em"
+              style={{ marginBottom: '0.5em', borderBottom: 'solid 0.5px' }}
+            >
+              <b>{char}</b>
+            </Text>
+            <ul
+              style={{
+                listStyleType: 'none',
+                listStylePosition: 'inside',
+                margin: 0,
+                padding: 0,
+                lineHeight: 0.8
+              }}
+            >
+              {groupedTags[char].map(t => (
+                <li key={t}>
+                  <Link key={t} to={`/tags/${t}/`}>
+                    {t}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </Layout>
   )
 }

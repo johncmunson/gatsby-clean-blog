@@ -1,4 +1,5 @@
 import { compose } from 'lodash/fp'
+import { sortBy, groupBy } from 'lodash'
 import { default as _slugify } from '@sindresorhus/slugify'
 
 // function compose() {
@@ -10,6 +11,14 @@ import { default as _slugify } from '@sindresorhus/slugify'
 //     return result
 //   }
 // }
+
+const groupByStartingLetter = arrayOfStrings =>
+  groupBy(arrayOfStrings, str => str.substring(0, 1).toLowerCase())
+
+export const sortAndGroupByStartingLetter = compose(
+  groupByStartingLetter,
+  sortBy
+)
 
 export const disableScrollAtTopAndBottom = (e, target) => {
   const { deltaY, deltaX } = e
