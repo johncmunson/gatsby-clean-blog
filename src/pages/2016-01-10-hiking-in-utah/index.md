@@ -2,7 +2,7 @@
 title: 'Hiking In Utah'
 date: '2016-01-10'
 path: '/hiking-in-utah/'
-tags: ['hiking', 'utah']
+tags: ['hiking', 'utah', 'travel']
 excerpt: 'The best way to experience the diverse landscapes of Utah is by hiking through them. Utah has some very remote areas that are accessible only to serious backpackers, but routes to other stunningly beautiful scenes are merely "pleasant walks."'
 cover: './mountain.jpg'
 draft: false

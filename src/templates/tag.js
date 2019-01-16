@@ -3,6 +3,7 @@ import Layout from '../components/layout'
 import Link from '../components/link'
 import MainNav from '../components/main-nav'
 import QuickNav from '../components/quick-nav'
+import Text from '../components/text'
 import FancyHr from '../components/fancy-hr'
 import { rhythm } from '../utils/typography'
 
@@ -15,18 +16,21 @@ const TagTemplate = ({ pageContext, location }) => {
         <div style={{ marginTop: rhythm(1.5) }}>
           <MainNav />
           <FancyHr />
-          <QuickNav
-            pageViews={pageViews}
-            style={{ marginTop: '1em', lineHeight: rhythm(1), fontSize: '1em' }}
-          />
+          <QuickNav pageViews={pageViews} />
         </div>
       )}
     >
-      <span>Posts about {tagName}:</span>
+      <div>
+        Posts tagged with...{' '}
+        <span style={{ fontSize: '1.4em', borderBottom: 'solid 0.5px' }}>
+          {tagName}
+        </span>
+      </div>
+      <br />
       <ul>
-        {posts.map(post => {
+        {posts.map((post, i) => {
           return (
-            <li key={post}>
+            <li key={i}>
               <Link to={post.frontmatter.path}>{post.frontmatter.title}</Link>
             </li>
           )

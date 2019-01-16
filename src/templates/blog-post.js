@@ -133,14 +133,7 @@ class BlogPostTemplate extends Component {
           <div style={{ marginTop: rhythm(1.5) }}>
             <MainNav />
             <FancyHr />
-            <QuickNav
-              pageViews={pageViews}
-              style={{
-                marginTop: '1em',
-                lineHeight: rhythm(1),
-                fontSize: '1em'
-              }}
-            />
+            <QuickNav pageViews={pageViews} />
           </div>
         )}
         renderRightSidebar={() => {
@@ -159,16 +152,20 @@ class BlogPostTemplate extends Component {
           }
         }}
         renderLeftSidebar={() => {
+          // The StickyBox left margin does not have an equivalent in the right sidebar.
+          // This is by design to help with symmetry. Remove the left margin if you want
+          // to see what I mean.
           if (pageViews) {
             return (
               <StickyBox
                 offsetTop={8}
-                style={{ ...sidebarStyles, marginLeft: '2em' }}
+                style={{
+                  ...sidebarStyles,
+                  marginRight: '2em',
+                  marginLeft: '1em'
+                }}
               >
-                <QuickNav
-                  pageViews={pageViews}
-                  style={{ ...sidebarStyles, marginRight: '2em' }}
-                />
+                <QuickNav pageViews={pageViews} />
               </StickyBox>
             )
           }

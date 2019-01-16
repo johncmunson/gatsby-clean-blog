@@ -37,10 +37,7 @@ const IndexPage = ({ data, location, pageContext }) => {
         <div style={{ marginTop: rhythm(1.5) }}>
           <MainNav location={location} />
           <FancyHr />
-          <QuickNav
-            pageViews={pageViews}
-            style={{ marginTop: '1em', lineHeight: rhythm(1), fontSize: '1em' }}
-          />
+          <QuickNav pageViews={pageViews} />
         </div>
       )}
     >
