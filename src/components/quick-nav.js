@@ -16,9 +16,9 @@ import {
 // ALSO, MOVING STYLES INTO A CONSTANTS FILE WAS A SILLY IDEA. SEARCH THE
 // PROJECT FOR '../../constants' AND REFACTOR.
 
-// TWO ISSUES THAT NEED FIXED:
+// ISSUES:
 // 1. THE SELECTED TAB SHOULD PERSIST WHEN A LINK IS CLICKED
-// 2. THE CURSOR SHOULD CHANGE WHEN A TAB IS HOVERED
+// 2. The current article should be bolded or underlined
 
 const TabTitle = styled.span`
   :hover {

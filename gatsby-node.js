@@ -43,10 +43,17 @@ function removeNonPostPagesFromAnalytics(el) {
   let parts = relUrl.split('/')
   if (
     relUrl === '/' ||
+    relUrl === '/zzz/' ||
+    relUrl === '/zzz' ||
+    relUrl === '/abcxyz/' ||
     relUrl === '/abcxyz' ||
+    relUrl === '/abc/' ||
     relUrl === '/abc' ||
+    relUrl === '/about/' ||
     relUrl === '/about' ||
+    relUrl === '/contact/' ||
     relUrl === '/contact' ||
+    relUrl === '/tags/' ||
     relUrl === '/tags'
   ) {
     return false

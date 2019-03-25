@@ -8,6 +8,8 @@ import Text from '../components/text'
 import { sortAndGroupByStartingLetter } from '../utils'
 import { rhythm } from '../utils/typography'
 
+// TO-DO: Figure out why the tag-index page isn't exactly in alphabetical order... a, o, c
+
 const TagIndexTemplate = ({ pageContext, location }) => {
   const { tags, pageViews } = pageContext
   const groupedTags = sortAndGroupByStartingLetter(tags)
