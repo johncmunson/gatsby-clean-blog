@@ -1,4 +1,6 @@
-### Gatsby Starter: [Gatsby Clean Blog](https://gatsby-clean-blog.netlify.com/)
+### Gatsby Clean Blog:
+
+Example site built with this template: https://www.truthyfalsy.net/
 
 If you are looking for a clean, elegant blog template that doesn't skimp on critical features then you've come to the right spot. Gatsby Clean Blog is built with Gatsby, the most advanced static site generator on the block. Gatsby itself is powered by React and Webpack. Think about it like a modern Jekyll.
 
