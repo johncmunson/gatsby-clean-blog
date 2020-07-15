@@ -1,4 +1,4 @@
-### Gatsby Clean Blog:
+### Gatsby Clean Blog
 
 Example site built with this template: https://www.truthyfalsy.net/
 
